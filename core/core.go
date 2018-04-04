@@ -1,11 +1,5 @@
 package core
 
-// ItemRepository ...
-type ItemRepository interface {
-	Store(item Item)
-	FindById(id int) Item
-}
-
 // Customer ...
 type Customer struct {
 	ID    int

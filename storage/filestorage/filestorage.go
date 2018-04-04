@@ -1,6 +1,7 @@
 package filestorage
 
 import (
+	"../../core"
 	"../../storage"
 )
 
@@ -17,12 +18,32 @@ func New() Storage {
 }
 
 // Save file to storage
-func (s Storage) Save() {
+func (s Storage) StoreItem(item core.Item) {
 
 }
 
 // Get file from storage
-func (s Storage) Get() {
+func (s Storage) FindItemById(id int) {
+
+}
+
+// Save bucket to storage
+func (s Storage) StoreOrder(item core.Item) {
+
+}
+
+// Get bucket from storage
+func (s Storage) FindOrderById(id int) {
+
+}
+
+// Save client to storage
+func (s Storage) StoreCustomer(item core.Item) {
+
+}
+
+// Get client from storage
+func (s Storage) FindCustomerById(id int) {
 
 }
 

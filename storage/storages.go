@@ -3,12 +3,14 @@ package storage
 import (
 	"fmt"
 	"log"
+	"../contracts/repositories"
 )
 
 // Storager ...
 type Storager interface {
-	Save()
-	Get()
+	repositories.CustomerRepository
+	repositories.OrderRepository
+	repositories.ItemRepository
 	//	String() string
 }
 
