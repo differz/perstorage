@@ -17,33 +17,33 @@ func New() Storage {
 	}
 }
 
-// Save file to storage
+// StoreItem save file to storage
 func (s Storage) StoreItem(item core.Item) {
 
 }
 
-// Get file from storage
-func (s Storage) FindItemById(id int) core.Item {
+// FindItemByID get file from storage
+func (s Storage) FindItemByID(id int) core.Item {
 	return core.Item{}
 }
 
-// Save bucket to storage
+// StoreOrder save bucket to storage
 func (s Storage) StoreOrder(item core.Order) {
 
 }
 
-// Get bucket from storage
-func (s Storage) FindOrderById(id int) core.Order {
+// FindOrderByID get bucket from storage
+func (s Storage) FindOrderByID(id int) core.Order {
 	return core.Order{}
 }
 
-// Save client to storage
+// StoreCustomer save client to storage
 func (s Storage) StoreCustomer(item core.Customer) {
 
 }
 
-// Get client from storage
-func (s Storage) FindCustomerById(id int) core.Customer {
+// FindCustomerByID get client from storage
+func (s Storage) FindCustomerByID(id int) core.Customer {
 	return core.Customer{}
 }
 

@@ -5,5 +5,5 @@ import "../../core"
 // ItemRepository ...
 type ItemRepository interface {
 	StoreItem(item core.Item)
-	FindItemById(id int) core.Item
+	FindItemByID(id int) core.Item
 }
