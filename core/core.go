@@ -14,6 +14,7 @@ type Item struct {
 	Value     []byte
 	Size      int
 	Available bool
+	Filename  string
 }
 
 // Order ...

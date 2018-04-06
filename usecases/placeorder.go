@@ -1,8 +1,14 @@
 package usecases
 
-import "../contracts/usecases"
+import (
+	"../config"
+	"../contracts/usecases"
+	"../core"
+)
 
 type PlaceOrderUseCase struct {
+
+	//
 	projectId   int64
 	subject     string
 	description string
@@ -14,13 +20,14 @@ func NewPlaceOrderUseCase() PlaceOrderUseCase {
 	}
 }
 
-func (u *PlaceOrderUseCase) placeOrder(request contracts.PlaceOrderRequest, output contracts.PlaceOrderOutput) {
-	/*      int projectId = request.getProjectId();
-	        String subject = request.getSubject();
-	        String description = request.getDescription();
+func (u PlaceOrderUseCase) PlaceOrder(request contracts.PlaceOrderRequest, output contracts.PlaceOrderOutput) {
+	filename := request.Filename
 
-	        orderRepository.saveIssue(issue);
+	orderID := int64(1)
 
-			output.onResponse(orderID);
-	*/
+	repo := config.Get().Storage
+
+	repo.StoreItem(core.Item{Filename: filename})
+
+	output.OnResponse(orderID)
 }
