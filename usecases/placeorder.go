@@ -1,7 +1,7 @@
 package usecases
 
 import (
-	"../config"
+	"../configuration"
 	"../contracts/usecases"
 	"../core"
 )
@@ -25,7 +25,7 @@ func (u PlaceOrderUseCase) PlaceOrder(request contracts.PlaceOrderRequest, outpu
 
 	orderID := int64(1)
 
-	repo := config.Get().Storage
+	repo := configuration.Get().Storage
 
 	repo.StoreItem(core.Item{Filename: filename})
 
