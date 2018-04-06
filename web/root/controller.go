@@ -14,17 +14,19 @@ type Controller struct {
 	name string
 }
 
+var uri = "/"
+
 func (c Controller) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprintf(w, "default: Server request, URL %s", r.URL.Path[1:])
 }
 
 func new() Controller {
 	c := Controller{
-		name: "/",
+		name: uri,
 	}
 
 	logger := log.New(os.Stdout, "server: ", log.Lshortfile)
-	http.Handle("/", web.Adapt(c, web.Notify(logger)))
+	http.Handle(uri, web.Adapt(c, web.Notify(logger)))
 
 	return c
 }
