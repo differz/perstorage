@@ -1,4 +1,4 @@
-package apicontroller
+package api
 
 import (
 	"fmt"
