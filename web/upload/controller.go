@@ -1,14 +1,10 @@
 package upload
 
 import (
-	"crypto/md5"
 	"fmt"
-	"html/template"
 	"io"
 	"net/http"
 	"os"
-	"strconv"
-	"time"
 
 	"../../web"
 )
@@ -29,25 +25,9 @@ func new() Controller {
 
 func handler(w http.ResponseWriter, r *http.Request) {
 	//	fmt.Fprintf(w, "/upload: Server request, URL %s", r.URL.Path[1:])
-	//	upload(w, r)
-	http.Redirect(w, r, "/", 301)
-}
 
-func init() {
-	web.Register(uri, new())
-}
-
-func upload(w http.ResponseWriter, r *http.Request) {
 	fmt.Println("method:", r.Method)
-	if r.Method == "GET" {
-		crutime := time.Now().Unix()
-		h := md5.New()
-		io.WriteString(h, strconv.FormatInt(crutime, 10))
-		token := fmt.Sprintf("%x", h.Sum(nil))
-
-		t, _ := template.ParseFiles("upload.gtpl")
-		t.Execute(w, token)
-	} else {
+	if r.Method == "POST" {
 		r.ParseMultipartForm(32 << 20)
 		file, handler, err := r.FormFile("uploadfile")
 		if err != nil {
@@ -64,4 +44,10 @@ func upload(w http.ResponseWriter, r *http.Request) {
 		defer f.Close()
 		io.Copy(f, file)
 	}
+
+	http.Redirect(w, r, "/", 301)
+}
+
+func init() {
+	web.Register(uri, new())
 }
