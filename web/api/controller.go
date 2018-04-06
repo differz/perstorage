@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"net/http"
 
-	"../../controller"
+	"../../web"
 )
 
 // Controller ...
@@ -26,5 +26,5 @@ func handler(w http.ResponseWriter, r *http.Request) {
 }
 
 func init() {
-	controller.Register(uri, new())
+	web.Register(uri, new())
 }

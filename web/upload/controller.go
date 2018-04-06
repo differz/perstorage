@@ -1,4 +1,4 @@
-package uploadcontroller
+package upload
 
 import (
 	"crypto/md5"
@@ -10,7 +10,7 @@ import (
 	"strconv"
 	"time"
 
-	"../../controller"
+	"../../web"
 )
 
 // Controller ...
@@ -34,7 +34,7 @@ func handler(w http.ResponseWriter, r *http.Request) {
 }
 
 func init() {
-	controller.Register(uri, new())
+	web.Register(uri, new())
 }
 
 func upload(w http.ResponseWriter, r *http.Request) {

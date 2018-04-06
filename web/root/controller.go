@@ -1,4 +1,4 @@
-package rootcontroller
+package root
 
 import (
 	"fmt"
@@ -6,7 +6,7 @@ import (
 	"net/http"
 	"os"
 
-	co "../../controller"
+	"../../web"
 )
 
 // Controller ...
@@ -24,11 +24,11 @@ func new() Controller {
 	}
 
 	logger := log.New(os.Stdout, "server: ", log.Lshortfile)
-	http.Handle("/", co.Adapt(c, co.Notify(logger)))
+	http.Handle("/", web.Adapt(c, web.Notify(logger)))
 
 	return c
 }
 
 func init() {
-	co.Register("root", new())
+	web.Register("root", new())
 }
