@@ -2,8 +2,10 @@ package contracts
 
 type PlaceOrderRequest struct {
 	Filename string
+	Phone    string
+	Private  bool
 	//
-	OrderId     int64
+	OrderId     int
 	Subject     string
 	Description string
 }
@@ -13,5 +15,5 @@ type PlaceOrderInput interface {
 }
 
 type PlaceOrderOutput interface {
-	OnResponse(orderID int64)
+	OnResponse(orderID int)
 }

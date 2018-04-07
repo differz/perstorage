@@ -17,9 +17,8 @@ type Service struct {
 }
 
 // NewService constructor
-func NewService(storage storage.Storager) Service {
+func NewService() Service {
 	return Service{
-		storage:    storage,
 		placeOrder: usecases.NewPlaceOrderUseCase(),
 	}
 }
@@ -40,7 +39,8 @@ func (s Service) uploadFile(r *http.Request) (string, error) {
 
 	por := contracts.PlaceOrderRequest{}
 	por.Filename = handler.Filename
-	por.Subject = "subject"
+	por.Phone = r.FormValue("phone")
+	por.Private = r.FormValue("private") == "private"
 
 	s.placeOrder.PlaceOrder(por, PlaceOrderResponse{})
 
@@ -50,7 +50,7 @@ func (s Service) uploadFile(r *http.Request) (string, error) {
 type PlaceOrderResponse struct {
 }
 
-func (r PlaceOrderResponse) OnResponse(orderID int64) {
+func (r PlaceOrderResponse) OnResponse(orderID int) {
 }
 
 func init() {
