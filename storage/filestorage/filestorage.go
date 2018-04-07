@@ -2,9 +2,16 @@ package filestorage
 
 import (
 	"crypto/sha256"
+	"database/sql"
 	"encoding/hex"
 	"fmt"
+	"hash/crc32"
+	"log"
 	"os"
+
+	"github.com/mattes/migrate"
+	"github.com/mattes/migrate/database/sqlite3"
+	_ "github.com/mattes/migrate/source/file"
 
 	"../../core"
 	"../../storage"
@@ -20,6 +27,11 @@ func New() Storage {
 	return Storage{
 		name: "file.txt",
 	}
+}
+
+// Migrate ...
+func (s Storage) Migrate() {
+
 }
 
 // StoreItem save file to storage
@@ -40,12 +52,31 @@ func (s Storage) StoreItem(item core.Item) {
 	err := os.MkdirAll(dir+hashHex, os.ModePerm)
 	os.Rename("./local/"+item.Filename, path)
 
+	item.ID = int(crc32.ChecksumIEEE([]byte(key)))
+
 	fmt.Println(err)
+
+	fileDB := dir + "perstorage.db"
+
+	//	os.Remove(fileDB)
+
+	db, err := sql.Open("sqlite3", fileDB)
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer db.Close()
+
+	driver, err := sqlite3.WithInstance(db, &sqlite3.Config{})
+	m, err := migrate.NewWithDatabaseInstance(
+		"file://./storage/filestorage/migrations",
+		"sqlite3", driver)
+	m.Up()
+
 }
 
 // FindItemByID get file from storage
-func (s Storage) FindItemByID(id int) core.Item {
-	return core.Item{}
+func (s Storage) FindItemByID(id int) (core.Item, bool) {
+	return core.Item{}, false
 }
 
 // StoreOrder save bucket to storage
@@ -54,8 +85,8 @@ func (s Storage) StoreOrder(item core.Order) {
 }
 
 // FindOrderByID get bucket from storage
-func (s Storage) FindOrderByID(id int) core.Order {
-	return core.Order{}
+func (s Storage) FindOrderByID(id int) (core.Order, bool) {
+	return core.Order{}, false
 }
 
 // StoreCustomer save client to storage
@@ -64,8 +95,8 @@ func (s Storage) StoreCustomer(item core.Customer) {
 }
 
 // FindCustomerByID get client from storage
-func (s Storage) FindCustomerByID(id int) core.Customer {
-	return core.Customer{}
+func (s Storage) FindCustomerByID(id int) (core.Customer, bool) {
+	return core.Customer{}, false
 }
 
 func init() {
