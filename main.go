@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"net/http"
 
+	"./configuration"
 	"./storage"
 	_ "./storage/filestorage"
 	_ "./storage/mongostorage"
@@ -17,8 +18,8 @@ func main() {
 	storage.Print()
 	web.Print()
 
-	db, _ := storage.Get("file", 1)
-	fmt.Println(db)
+	cfg := configuration.Get()
+	defer cfg.Close()
 
 	con, _ := web.Get("root", 1)
 	fmt.Println(con)

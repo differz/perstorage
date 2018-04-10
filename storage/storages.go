@@ -1,8 +1,10 @@
 package storage
 
 import (
+	"database/sql"
 	"fmt"
 	"log"
+
 	"../contracts/repositories"
 )
 
@@ -11,6 +13,8 @@ type Storager interface {
 	repositories.CustomerRepository
 	repositories.OrderRepository
 	repositories.ItemRepository
+	InitDB() *sql.DB
+	Migrate(db *sql.DB)
 	//	String() string
 }
 

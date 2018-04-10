@@ -1,6 +1,9 @@
 package mongostorage
 
 import (
+	"database/sql"
+	"fmt"
+
 	"../../core"
 	"../../storage"
 )
@@ -15,6 +18,15 @@ func New() Storage {
 	return Storage{
 		name: "MongoDB",
 	}
+}
+
+func (s Storage) InitDB() *sql.DB {
+	fmt.Println("InitDB<>")
+	return nil
+}
+
+func (s Storage) Migrate(db *sql.DB) {
+
 }
 
 // StoreItem save file to storage

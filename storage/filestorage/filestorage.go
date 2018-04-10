@@ -29,9 +29,33 @@ func New() Storage {
 	}
 }
 
-// Migrate ...
-func (s Storage) Migrate() {
+// InitDB ...
+func (s Storage) InitDB() *sql.DB {
+	fmt.Println("InitDB<>")
 
+	dir := "./local/filestorage/"
+	err := os.MkdirAll(dir, os.ModePerm)
+	fileDB := dir + "perstorage.db"
+
+	db, err := sql.Open("sqlite3", fileDB)
+	if err != nil {
+		log.Fatal(err)
+	}
+	//	defer db.Close()
+	return db
+}
+
+// Migrate ...
+func (s Storage) Migrate(db *sql.DB) {
+	driver, err := sqlite3.WithInstance(db, &sqlite3.Config{})
+	//TODO: if err != nil {}
+	m, err := migrate.NewWithDatabaseInstance(
+		"file://./storage/filestorage/migrations",
+		"sqlite3", driver)
+	if err != nil {
+		return
+	}
+	m.Up()
 }
 
 // StoreItem save file to storage

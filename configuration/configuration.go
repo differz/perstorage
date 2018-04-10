@@ -1,13 +1,15 @@
 package configuration
 
 import (
+	"database/sql"
 	"sync"
 
 	"../storage"
 )
 
 type Config struct {
-	Storage storage.Storager
+	Storage    storage.Storager
+	Connection *sql.DB
 }
 
 var (
@@ -21,7 +23,13 @@ func Get() *Config {
 
 		cfg = &Config{}
 		cfg.Storage = repo
+		cfg.Connection = repo.InitDB()
 
+		repo.Migrate(cfg.Connection)
 	})
 	return cfg
+}
+
+func (c Config) Close() {
+	c.Connection.Close()
 }
