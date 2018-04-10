@@ -11,6 +11,7 @@ import (
 
 	"github.com/mattes/migrate"
 	"github.com/mattes/migrate/database/sqlite3"
+	// sqlite
 	_ "github.com/mattes/migrate/source/file"
 
 	"../../configuration"
