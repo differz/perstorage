@@ -6,13 +6,11 @@ import (
 	"os"
 
 	"../../contracts/usecases"
-	"../../storage"
 	"../../usecases"
 )
 
 // Service ...
 type Service struct {
-	storage    storage.Storager
 	placeOrder contracts.PlaceOrderInput
 }
 
@@ -30,12 +28,13 @@ func (s Service) uploadFile(r *http.Request) (string, error) {
 		return "", err
 	}
 	defer file.Close()
-	f, err := os.OpenFile("./local/"+handler.Filename, os.O_WRONLY|os.O_CREATE, 0666)
+
+	temp, err := os.OpenFile("./local/"+handler.Filename, os.O_WRONLY|os.O_CREATE, 0666)
 	if err != nil {
 		return "", err
 	}
-	defer f.Close()
-	io.Copy(f, file)
+	defer temp.Close()
+	io.Copy(temp, file)
 
 	por := contracts.PlaceOrderRequest{}
 	por.Filename = handler.Filename
@@ -44,7 +43,7 @@ func (s Service) uploadFile(r *http.Request) (string, error) {
 
 	s.placeOrder.PlaceOrder(por, PlaceOrderResponse{})
 
-	return f.Name(), nil
+	return temp.Name(), nil
 }
 
 type PlaceOrderResponse struct {
