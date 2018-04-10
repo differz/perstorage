@@ -28,7 +28,7 @@ func (u PlaceOrderUseCase) PlaceOrder(request contracts.PlaceOrderRequest, outpu
 
 	repo := configuration.Get().Storage
 
-	customerID, err := strconv.Atoi(strings.Replace(request.Phone, "+380", "", 1))
+	customerID, err := strconv.Atoi(strings.Replace(request.Phone, "+", "", 1))
 	if err != nil {
 
 	}
@@ -43,12 +43,18 @@ func (u PlaceOrderUseCase) PlaceOrder(request contracts.PlaceOrderRequest, outpu
 	fmt.Println(customer)
 
 	item := core.Item{Filename: filename}
-	repo.StoreItem(item)
+	item.ID, err = repo.StoreItem(item)
+	if err != nil {
+		return
+	}
 
 	order := core.Order{Customer: customer}
 	order.Add(item)
 
-	repo.StoreOrder(order)
+	order.ID, err = repo.StoreOrder(order)
+	if err != nil {
+		return
+	}
 
 	output.OnResponse(order.ID)
 }

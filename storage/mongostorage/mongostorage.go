@@ -30,8 +30,8 @@ func (s Storage) Migrate(db *sql.DB) {
 }
 
 // StoreItem save file to storage
-func (s Storage) StoreItem(item core.Item) {
-
+func (s Storage) StoreItem(item core.Item) (int, error) {
+	return 0, nil
 }
 
 // FindItemByID get file from storage
@@ -40,8 +40,8 @@ func (s Storage) FindItemByID(id int) (core.Item, bool) {
 }
 
 // StoreOrder save bucket to storage
-func (s Storage) StoreOrder(item core.Order) {
-
+func (s Storage) StoreOrder(item core.Order) (int, error) {
+	return 0, nil
 }
 
 // FindOrderByID get bucket from storage
@@ -50,8 +50,8 @@ func (s Storage) FindOrderByID(id int) (core.Order, bool) {
 }
 
 // StoreCustomer save client to storage
-func (s Storage) StoreCustomer(item core.Customer) {
-
+func (s Storage) StoreCustomer(item core.Customer) (int, error) {
+	return 0, nil
 }
 
 // FindCustomerByID get client from storage

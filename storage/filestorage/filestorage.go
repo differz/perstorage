@@ -13,6 +13,7 @@ import (
 	"github.com/mattes/migrate/database/sqlite3"
 	_ "github.com/mattes/migrate/source/file"
 
+	"../../configuration"
 	"../../core"
 	"../../storage"
 )
@@ -25,7 +26,7 @@ type Storage struct {
 // New create storage instance
 func New() Storage {
 	return Storage{
-		name: "file.txt",
+		name: "file.db",
 	}
 }
 
@@ -59,7 +60,7 @@ func (s Storage) Migrate(db *sql.DB) {
 }
 
 // StoreItem save file to storage
-func (s Storage) StoreItem(item core.Item) {
+func (s Storage) StoreItem(item core.Item) (int, error) {
 	fmt.Println("StoreItem<>")
 
 	key := "salt:" + item.Filename
@@ -76,27 +77,20 @@ func (s Storage) StoreItem(item core.Item) {
 	err := os.MkdirAll(dir+hashHex, os.ModePerm)
 	os.Rename("./local/"+item.Filename, path)
 
-	item.ID = int(crc32.ChecksumIEEE([]byte(key)))
-
 	fmt.Println(err)
-	/*
-		fileDB := dir + "perstorage.db"
 
-		//	os.Remove(fileDB)
+	sql := "INSERT INTO items(name, filename, size, available) VALUES(?, ?, ?, ?)"
+	db := configuration.Get().Connection
+	stmt, err := db.Prepare(sql)
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer stmt.Close()
 
-		db, err := sql.Open("sqlite3", fileDB)
-		if err != nil {
-			log.Fatal(err)
-		}
-		defer db.Close()
+	stmt.Exec("", item.Filename, -1, true)
 
-		driver, err := sqlite3.WithInstance(db, &sqlite3.Config{})
-		m, err := migrate.NewWithDatabaseInstance(
-			"file://./storage/filestorage/migrations",
-			"sqlite3", driver)
-		m.Up()
-	*/
-
+	itemID := int(crc32.ChecksumIEEE([]byte(key)))
+	return itemID, nil
 }
 
 // FindItemByID get file from storage
@@ -105,8 +99,31 @@ func (s Storage) FindItemByID(id int) (core.Item, bool) {
 }
 
 // StoreOrder save bucket to storage
-func (s Storage) StoreOrder(item core.Order) {
+func (s Storage) StoreOrder(order core.Order) (int, error) {
+	sql := "INSERT INTO orders(order_id, customer_id, item_id) VALUES(?, ?, ?)"
+	db := configuration.Get().Connection
+	tx, err := db.Begin()
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	stmt, err := tx.Prepare(sql)
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer stmt.Close()
+
+	for index, item := range order.Items {
+		fmt.Println(index)
+		_, err = stmt.Exec(order.ID, order.Customer.ID, item.ID)
+		if err != nil {
+			log.Fatal(err)
+		}
+	}
+	tx.Commit()
+
 	fmt.Println("StoreOrder<>")
+	return 0, nil
 }
 
 // FindOrderByID get bucket from storage
@@ -115,13 +132,48 @@ func (s Storage) FindOrderByID(id int) (core.Order, bool) {
 }
 
 // StoreCustomer save client to storage
-func (s Storage) StoreCustomer(item core.Customer) {
+func (s Storage) StoreCustomer(item core.Customer) (int, error) {
+	sql := "INSERT INTO customers(id, name, phone) VALUES(?, ?, ?)"
+	db := configuration.Get().Connection
+	stmt, err := db.Prepare(sql)
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer stmt.Close()
+
+	stmt.Exec(item.ID, item.Name, item.Phone)
+
 	fmt.Println("StoreCustomer<>")
+	return 0, nil
 }
 
 // FindCustomerByID get client from storage
 func (s Storage) FindCustomerByID(id int) (core.Customer, bool) {
-	return core.Customer{}, false
+	sql := "SELECT id, name, phone FROM customers WHERE id = ?"
+	db := configuration.Get().Connection
+	stmt, err := db.Prepare(sql)
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer stmt.Close()
+
+	rows, err := stmt.Query(id)
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer rows.Close()
+
+	customer := core.Customer{}
+	ok := false
+	if rows.Next() {
+		err = rows.Scan(&customer.ID, &customer.Name, &customer.Phone)
+		if err != nil {
+			log.Fatal(err)
+		}
+		ok = true
+		fmt.Println(customer.ID, customer.Phone)
+	}
+	return customer, ok
 }
 
 func init() {
