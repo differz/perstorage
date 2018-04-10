@@ -79,22 +79,23 @@ func (s Storage) StoreItem(item core.Item) {
 	item.ID = int(crc32.ChecksumIEEE([]byte(key)))
 
 	fmt.Println(err)
+	/*
+		fileDB := dir + "perstorage.db"
 
-	fileDB := dir + "perstorage.db"
+		//	os.Remove(fileDB)
 
-	//	os.Remove(fileDB)
+		db, err := sql.Open("sqlite3", fileDB)
+		if err != nil {
+			log.Fatal(err)
+		}
+		defer db.Close()
 
-	db, err := sql.Open("sqlite3", fileDB)
-	if err != nil {
-		log.Fatal(err)
-	}
-	defer db.Close()
-
-	driver, err := sqlite3.WithInstance(db, &sqlite3.Config{})
-	m, err := migrate.NewWithDatabaseInstance(
-		"file://./storage/filestorage/migrations",
-		"sqlite3", driver)
-	m.Up()
+		driver, err := sqlite3.WithInstance(db, &sqlite3.Config{})
+		m, err := migrate.NewWithDatabaseInstance(
+			"file://./storage/filestorage/migrations",
+			"sqlite3", driver)
+		m.Up()
+	*/
 
 }
 
