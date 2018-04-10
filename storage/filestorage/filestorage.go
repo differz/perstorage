@@ -42,6 +42,14 @@ func (s Storage) InitDB() *sql.DB {
 	if err != nil {
 		log.Fatal(err)
 	}
+
+	// db, _ := gorm.Open("sqlite3", "test.db")
+	// db.Exec("PRAGMA foreign_keys = ON")
+	// db.LogMode(true)
+	// db.AutoMigrate(&User{}, &Address{})
+	// fmt.Println(db.Save(&User{}).Error)
+	// fmt.Println(db.Save(&Address{}).Error)
+
 	//	defer db.Close()
 	return db
 }
@@ -77,9 +85,15 @@ func (s Storage) StoreItem(item core.Item) (int, error) {
 	err := os.MkdirAll(dir+hashHex, os.ModePerm)
 	os.Rename("./local/"+item.Filename, path)
 
+	fi, err := os.Stat(path)
+	size := int64(-1)
+	if err == nil {
+		size = fi.Size()
+	}
+
 	fmt.Println(err)
 
-	sql := "INSERT INTO items(name, filename, size, available) VALUES(?, ?, ?, ?)"
+	sql := "INSERT INTO items(name, filename, path, size, available) VALUES(?, ?, ?, ?, ?)"
 	db := configuration.Get().Connection
 	stmt, err := db.Prepare(sql)
 	if err != nil {
@@ -87,7 +101,7 @@ func (s Storage) StoreItem(item core.Item) (int, error) {
 	}
 	defer stmt.Close()
 
-	stmt.Exec("", item.Filename, -1, true)
+	stmt.Exec("", item.Filename, path, size, true)
 
 	itemID := int(crc32.ChecksumIEEE([]byte(key)))
 	return itemID, nil
