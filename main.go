@@ -9,6 +9,7 @@ import (
 	_ "./storage/filestorage"
 	_ "./storage/mongostorage"
 	"./web"
+	_ "./web/download"
 	_ "./web/root"
 	_ "./web/upload"
 )
