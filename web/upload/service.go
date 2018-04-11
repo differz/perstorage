@@ -7,6 +7,7 @@ import (
 
 	"../../contracts/usecases"
 	"../../usecases"
+	"gopkg.in/cheggaaa/pb.v1"
 )
 
 // Service ...
@@ -34,7 +35,13 @@ func (s Service) uploadFile(r *http.Request) (string, error) {
 		return "", err
 	}
 	defer temp.Close()
-	io.Copy(temp, file)
+
+	dataSize := int(handler.Size)
+	bar := pb.New(dataSize).SetUnits(pb.U_BYTES)
+	bar.Start()
+	reader := bar.NewProxyReader(file)
+	io.Copy(temp, reader)
+	bar.Finish()
 
 	por := contracts.PlaceOrderRequest{}
 	por.Filename = handler.Filename
