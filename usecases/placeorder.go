@@ -11,7 +11,6 @@ import (
 )
 
 type PlaceOrderUseCase struct {
-
 	//
 	subject     string
 	description string

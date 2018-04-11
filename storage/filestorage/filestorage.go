@@ -33,7 +33,7 @@ func New() Storage {
 
 // InitDB ...
 func (s Storage) InitDB() *sql.DB {
-	fmt.Println("InitDB<>")
+	fmt.Println("InitDB file storage")
 
 	dir := "./local/filestorage/"
 	err := os.MkdirAll(dir, os.ModePerm)

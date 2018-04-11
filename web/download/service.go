@@ -21,7 +21,8 @@ func NewService() Service {
 
 func (s Service) downloadFile(r *http.Request) (string, error) {
 
-	tor := TakeOrderRequest{}
+	tor := contracts.TakeOrderRequest{}
+
 	s.takeOrder.TakeOrder(tor, TakeOrderResponse{})
 
 	return "", nil
