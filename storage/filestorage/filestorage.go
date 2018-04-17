@@ -160,10 +160,10 @@ func (s Storage) StoreOrder(order core.Order) (int, error) {
 		log.Fatal(err)
 	}
 
-	sql = "INSERT INTO ordered_items(order_id, customer_id, item_id) VALUES(?, ?, ?)"
+	sql = "INSERT INTO ordered_items(order_id, item_id) VALUES(?, ?)"
 	stmt, err = tx.Prepare(sql)
 	for _, item := range order.Items {
-		_, err := stmt.Exec(order.ID, order.Customer.ID, item.ID)
+		_, err := stmt.Exec(order.ID, item.ID)
 		if err != nil {
 			log.Fatal(err)
 		}
