@@ -110,8 +110,6 @@ func (s Storage) StoreItem(item core.Item) (int, error) {
 		id, err := res.LastInsertId()
 		if err != nil {
 			println("Error:", err.Error())
-		} else {
-			println("LastInsertId:", id)
 		}
 		item.ID = int(id)
 	}
@@ -148,8 +146,6 @@ func (s Storage) StoreOrder(order core.Order) (int, error) {
 		id, err := res.LastInsertId()
 		if err != nil {
 			println("Error:", err.Error())
-		} else {
-			println("LastInsertId:", id)
 		}
 		order.ID = int(id)
 	}
@@ -201,8 +197,6 @@ func (s Storage) StoreCustomer(customer core.Customer) (int, error) {
 		id, err := res.LastInsertId()
 		if err != nil {
 			println("Error:", err.Error())
-		} else {
-			println("LastInsertId:", id)
 		}
 		customer.ID = int(id)
 	}
