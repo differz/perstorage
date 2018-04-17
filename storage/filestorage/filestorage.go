@@ -268,19 +268,16 @@ func (s Storage) FindOrderByLink(link string) (core.Order, bool) {
 	defer rows.Close()
 
 	order := core.Order{}
-	ok := false
 	if rows.Next() {
 		err = rows.Scan(&order.ID)
 		if err != nil {
 			log.Fatal(err)
 		}
-		ok = true
+	} else {
+		return order, false
 	}
 
-	if ok {
-		order, ok = s.FindOrderByID(order.ID)
-	}
-	return order, ok
+	return s.FindOrderByID(order.ID)
 }
 
 // StoreCustomer save client to storage
