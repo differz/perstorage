@@ -199,58 +199,60 @@ func (s Storage) FindOrderByID(id int) (core.Order, bool) {
 		}
 		ok = true
 	}
-
-	if ok {
-		sql = "SELECT id, name, phone FROM customers WHERE id = ?"
-		stmt, err = s.connection.Prepare(sql)
-		if err != nil {
-			log.Fatal(err)
-		}
-		rows, err = stmt.Query(customer.ID)
-		if err != nil {
-			log.Fatal(err)
-		}
-		ok = false
-		if rows.Next() {
-			err = rows.Scan(&customer.ID, &customer.Name, &customer.Phone)
-			if err != nil {
-				log.Fatal(err)
-			}
-			ok = true
-			order.Customer = customer
-		}
+	if !ok {
+		return order, ok
 	}
 
-	if ok {
-		sql = "SELECT" +
-			"  i.id," +
-			"  i.name," +
-			"  i.filename," +
-			"  i.path," +
-			"  i.size," +
-			"  i.available" +
-			" FROM ordered_items AS oi" +
-			" LEFT JOIN items AS i" +
-			"	ON oi.item_id = i.id" +
-			" WHERE order_id = ?"
-		stmt, err = s.connection.Prepare(sql)
+	sql = "SELECT id, name, phone FROM customers WHERE id = ?"
+	stmt, err = s.connection.Prepare(sql)
+	if err != nil {
+		log.Fatal(err)
+	}
+	rows, err = stmt.Query(customer.ID)
+	if err != nil {
+		log.Fatal(err)
+	}
+	ok = false
+	if rows.Next() {
+		err = rows.Scan(&customer.ID, &customer.Name, &customer.Phone)
 		if err != nil {
 			log.Fatal(err)
 		}
-		rows, err = stmt.Query(order.ID)
+		ok = true
+		order.Customer = customer
+	}
+	if !ok {
+		return order, ok
+	}
+
+	sql = "SELECT" +
+		"  i.id," +
+		"  i.name," +
+		"  i.filename," +
+		"  i.path," +
+		"  i.size," +
+		"  i.available" +
+		" FROM ordered_items AS oi" +
+		" LEFT JOIN items AS i" +
+		"	ON oi.item_id = i.id" +
+		" WHERE order_id = ?"
+	stmt, err = s.connection.Prepare(sql)
+	if err != nil {
+		log.Fatal(err)
+	}
+	rows, err = stmt.Query(order.ID)
+	if err != nil {
+		log.Fatal(err)
+	}
+	ok = false
+	for rows.Next() {
+		item := core.Item{}
+		err = rows.Scan(&item.ID, &item.Name, &item.Filename, &item.SourceName, &item.Size, &item.Available)
 		if err != nil {
 			log.Fatal(err)
 		}
-		ok = false
-		for rows.Next() {
-			item := core.Item{}
-			err = rows.Scan(&item.ID, &item.Name, &item.Filename, &item.SourceName, &item.Size, &item.Available)
-			if err != nil {
-				log.Fatal(err)
-			}
-			ok = true
-			order.Add(item)
-		}
+		ok = true
+		order.Add(item)
 	}
 
 	return order, ok
