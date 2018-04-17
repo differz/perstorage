@@ -27,7 +27,7 @@ func (u PlaceOrderUseCase) PlaceOrder(request contracts.PlaceOrderRequest, outpu
 
 	customerID, err := strconv.Atoi(strings.Replace(request.Phone, "+", "", 1))
 	if err != nil {
-
+		// TODO error
 	}
 
 	customer, ok := repo.FindCustomerByID(customerID)

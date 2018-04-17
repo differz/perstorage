@@ -128,7 +128,7 @@ func (s Storage) FindItemByID(id int) (core.Item, bool) {
 
 // StoreOrder save bucket to storage
 func (s Storage) StoreOrder(order core.Order) (int, error) {
-	sql := "INSERT INTO orders(order_id, customer_id, item_id) VALUES(?, ?, ?)"
+	sql := "INSERT INTO orders(customer_id) VALUES(?)"
 	db := configuration.Get().Connection
 	orderID := order.ID
 	tx, err := db.Begin()
@@ -142,24 +142,32 @@ func (s Storage) StoreOrder(order core.Order) (int, error) {
 	}
 	defer stmt.Close()
 
+	res, err := stmt.Exec(order.Customer.ID)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	if order.IsNew() {
+		id, err := res.LastInsertId()
+		if err != nil {
+			println("Error:", err.Error())
+		} else {
+			println("LastInsertId:", id)
+		}
+		orderID = int(id)
+	}
+
+	sql = "INSERT INTO ordered_items(order_id, customer_id, item_id) VALUES(?, ?, ?)"
+	stmt, err = tx.Prepare(sql)
 	for index, item := range order.Items {
 		fmt.Println(index)
-		res, err := stmt.Exec(orderID, order.Customer.ID, item.ID)
+		_, err := stmt.Exec(orderID, order.Customer.ID, item.ID)
 		if err != nil {
 			log.Fatal(err)
 		}
-
-		if orderID == 0 {
-			id, err := res.LastInsertId()
-			if err != nil {
-				println("Error:", err.Error())
-			} else {
-				println("LastInsertId:", id)
-			}
-			orderID = int(id)
-		}
 	}
 	err = tx.Commit()
+
 	if order.IsNew() && err == nil {
 		order.ID = orderID
 	}
