@@ -154,11 +154,20 @@ func (s Storage) StoreOrder(order core.Order) (int, error) {
 		order.ID = int(id)
 	}
 
-	sql = "INSERT INTO ordered_items(order_id, customer_id, item_id, link) VALUES(?, ?, ?, ?)"
+	sql = "INSERT INTO order_links(order_id, link) VALUES(?, ?)"
 	stmt, err = tx.Prepare(sql)
-	for index, item := range order.Items {
-		fmt.Println(index)
-		_, err := stmt.Exec(order.ID, order.Customer.ID, item.ID, order.Link())
+	if err != nil {
+		log.Fatal(err)
+	}
+	_, err = stmt.Exec(order.ID, order.Link())
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	sql = "INSERT INTO ordered_items(order_id, customer_id, item_id) VALUES(?, ?, ?)"
+	stmt, err = tx.Prepare(sql)
+	for _, item := range order.Items {
+		_, err := stmt.Exec(order.ID, order.Customer.ID, item.ID)
 		if err != nil {
 			log.Fatal(err)
 		}
