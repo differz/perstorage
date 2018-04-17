@@ -19,7 +19,6 @@ func NewTakeOrderUseCase() TakeOrderUseCase {
 
 func (u TakeOrderUseCase) TakeOrder(request contracts.TakeOrderRequest, output contracts.TakeOrderOutput) {
 	//filename := request.Filename
-
 	//repo := configuration.Get().Storage
 
 	order := core.Order{}

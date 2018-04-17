@@ -2,8 +2,10 @@ package contracts
 
 type PlaceOrderRequest struct {
 	Filename string
+	Dir      string
 	Phone    string
 	Private  bool
+	MD5      []byte
 	//
 	OrderId     int
 	Subject     string
@@ -16,4 +18,8 @@ type PlaceOrderInput interface {
 
 type PlaceOrderOutput interface {
 	OnResponse(orderID int)
+}
+
+func (r PlaceOrderRequest) GetSourceName() string {
+	return r.Dir + r.Filename
 }

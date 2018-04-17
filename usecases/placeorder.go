@@ -23,8 +23,6 @@ func NewPlaceOrderUseCase() PlaceOrderUseCase {
 }
 
 func (u PlaceOrderUseCase) PlaceOrder(request contracts.PlaceOrderRequest, output contracts.PlaceOrderOutput) {
-	filename := request.Filename
-
 	repo := configuration.Get().Storage
 
 	customerID, err := strconv.Atoi(strings.Replace(request.Phone, "+", "", 1))
@@ -41,7 +39,7 @@ func (u PlaceOrderUseCase) PlaceOrder(request contracts.PlaceOrderRequest, outpu
 
 	fmt.Println(customer)
 
-	item := core.Item{Filename: filename}
+	item := core.Item{Filename: request.Filename, SourceName: request.GetSourceName()}
 	item.ID, err = repo.StoreItem(item)
 	if err != nil {
 		return

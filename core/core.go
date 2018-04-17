@@ -9,12 +9,13 @@ type Customer struct {
 
 // Item ...
 type Item struct {
-	ID        int
-	Name      string
-	Value     []byte
-	Size      int
-	Available bool
-	Filename  string
+	ID         int
+	Name       string
+	Value      []byte
+	Size       int
+	Available  bool
+	Filename   string
+	SourceName string
 }
 
 // Order ...

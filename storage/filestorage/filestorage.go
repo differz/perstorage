@@ -1,9 +1,7 @@
 package filestorage
 
 import (
-	"crypto/sha256"
 	"database/sql"
-	"encoding/hex"
 	"fmt"
 	"hash/crc32"
 	"log"
@@ -11,6 +9,7 @@ import (
 
 	"github.com/mattes/migrate"
 	"github.com/mattes/migrate/database/sqlite3"
+	"github.com/satori/go.uuid"
 	// sqlite
 	_ "github.com/mattes/migrate/source/file"
 
@@ -73,26 +72,28 @@ func (s Storage) StoreItem(item core.Item) (int, error) {
 	fmt.Println("StoreItem<>")
 
 	key := "salt:" + item.Filename
-	hasher := sha256.New()
-	hasher.Write([]byte(key))
-	hash := hasher.Sum(nil)
-	hashHex := hex.EncodeToString(hash)
 
-	// create <dir> 3aa16ca782e477f5ae798e68c5b335b4e77873bbf9154ac5fd0fa098ef2b1c51
-	dir := "./local/filestorage/"
+	// TODO: namespace
+	ns, err := uuid.FromString("6ba7b810-9dad-11d1-80b4-00c04fd430c8")
+	if err != nil {
+		fmt.Printf("Something went wrong: %s", err)
+	}
+	u5 := uuid.NewV5(ns, key)
+	if err != nil {
+		fmt.Printf("Something went wrong: %s", err)
+	}
 
-	path := dir + hashHex + "/" + item.Filename
+	dir := "./local/filestorage/" + u5.String() + "/"
+	path := dir + item.Filename
 
-	err := os.MkdirAll(dir+hashHex, os.ModePerm)
-	os.Rename("./local/"+item.Filename, path)
+	err = os.MkdirAll(dir, os.ModePerm)
+	os.Rename(item.SourceName, path)
 
 	fi, err := os.Stat(path)
 	size := int64(-1)
 	if err == nil {
 		size = fi.Size()
 	}
-
-	fmt.Println(err)
 
 	sql := "INSERT INTO items(name, filename, path, size, available) VALUES(?, ?, ?, ?, ?)"
 	db := configuration.Get().Connection

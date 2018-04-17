@@ -1,7 +1,10 @@
 package upload
 
 import (
+	"crypto/md5"
+	"fmt"
 	"io"
+	"mime/multipart"
 	"net/http"
 	"os"
 
@@ -24,33 +27,52 @@ func NewService() Service {
 
 func (s Service) uploadFile(r *http.Request) (string, error) {
 	r.ParseMultipartForm(32 << 20)
+	inMD5 := r.FormValue("MD5")
 	file, handler, err := r.FormFile("uploadfile")
 	if err != nil {
 		return "", err
 	}
 	defer file.Close()
 
-	temp, err := os.OpenFile("./local/"+handler.Filename, os.O_WRONLY|os.O_CREATE, 0666)
+	por := contracts.PlaceOrderRequest{}
+	por.Filename = handler.Filename
+	por.Dir = "./local/incoming/" + inMD5 + "/"
+	por.Phone = r.FormValue("phone")
+	por.Private = r.FormValue("private") == "private"
+
+	err = os.MkdirAll(por.Dir, os.ModePerm)
+	// TODO error
+
+	temp, err := os.OpenFile(por.GetSourceName(), os.O_RDWR|os.O_CREATE, 0666)
 	if err != nil {
+		fmt.Println("can't create file")
 		return "", err
 	}
 	defer temp.Close()
 
-	dataSize := int(handler.Size)
-	bar := pb.New(dataSize).SetUnits(pb.U_BYTES)
-	bar.Start()
-	reader := bar.NewProxyReader(file)
-	io.Copy(temp, reader)
-	bar.Finish()
-
-	por := contracts.PlaceOrderRequest{}
-	por.Filename = handler.Filename
-	por.Phone = r.FormValue("phone")
-	por.Private = r.FormValue("private") == "private"
+	copyFile(file, temp, int(handler.Size))
+	por.MD5 = computeMD5(temp)
 
 	s.placeOrder.PlaceOrder(por, PlaceOrderResponse{})
 
 	return temp.Name(), nil
+}
+
+func copyFile(in multipart.File, out *os.File, dataSize int) {
+	bar := pb.New(dataSize).SetUnits(pb.U_BYTES)
+	bar.Start()
+	reader := bar.NewProxyReader(in)
+	io.Copy(out, reader)
+	bar.Finish()
+}
+
+func computeMD5(file *os.File) []byte {
+	var result []byte
+	hash := md5.New()
+	if _, err := io.Copy(hash, file); err != nil {
+		return result
+	}
+	return hash.Sum(result)
 }
 
 type PlaceOrderResponse struct {
