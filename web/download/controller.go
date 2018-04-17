@@ -26,8 +26,7 @@ func handler(w http.ResponseWriter, r *http.Request) {
 	fmt.Println("method:", r.Method)
 	if r.Method == "GET" {
 		srv := NewService(uri)
-
-		name, err := srv.downloadFile(r)
+		name, err := srv.downloadFile(w, r)
 		if err == nil {
 			fmt.Println(name)
 		}

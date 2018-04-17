@@ -9,5 +9,5 @@ type TakeOrderInput interface {
 }
 
 type TakeOrderOutput interface {
-	OnResponse(orderID int)
+	OnResponse(sourcename, filename string, size int)
 }
