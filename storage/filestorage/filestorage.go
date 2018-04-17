@@ -12,32 +12,32 @@ import (
 	// sqlite
 	_ "github.com/mattes/migrate/source/file"
 
-	"../../configuration"
 	"../../core"
 	"../../storage"
 )
 
 // Storage ...
 type Storage struct {
-	name string
+	name       string
+	connection *sql.DB
 }
 
 // New create storage instance
-func New() Storage {
-	return Storage{
+func New() *Storage {
+	return &Storage{
 		name: "file.db",
 	}
 }
 
 // InitDB ...
-func (s Storage) InitDB() *sql.DB {
+func (s *Storage) InitDB() *sql.DB {
 	fmt.Println("InitDB file storage")
 
 	dir := "./local/filestorage/"
 	err := os.MkdirAll(dir, os.ModePerm)
 	fileDB := dir + "perstorage.db"
 
-	db, err := sql.Open("sqlite3", fileDB)
+	s.connection, err = sql.Open("sqlite3", fileDB)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -50,12 +50,12 @@ func (s Storage) InitDB() *sql.DB {
 	// fmt.Println(db.Save(&Address{}).Error)
 
 	//	defer db.Close()
-	return db
+	return s.connection
 }
 
 // Migrate ...
-func (s Storage) Migrate(db *sql.DB) {
-	driver, err := sqlite3.WithInstance(db, &sqlite3.Config{})
+func (s Storage) Migrate() {
+	driver, err := sqlite3.WithInstance(s.connection, &sqlite3.Config{})
 	//TODO: if err != nil {}
 	m, err := migrate.NewWithDatabaseInstance(
 		"file://./storage/filestorage/migrations",
@@ -68,7 +68,6 @@ func (s Storage) Migrate(db *sql.DB) {
 
 // StoreItem save file to storage
 func (s Storage) StoreItem(item core.Item) (int, error) {
-	fmt.Println("StoreItem<>")
 
 	key := "salt:" + item.Filename
 
@@ -95,8 +94,7 @@ func (s Storage) StoreItem(item core.Item) (int, error) {
 	}
 
 	sql := "INSERT INTO items(name, filename, path, size, available) VALUES(?, ?, ?, ?, ?)"
-	db := configuration.Get().Connection
-	stmt, err := db.Prepare(sql)
+	stmt, err := s.connection.Prepare(sql)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -118,6 +116,7 @@ func (s Storage) StoreItem(item core.Item) (int, error) {
 		item.ID = int(id)
 	}
 
+	fmt.Println("StoreItem<>")
 	return item.ID, err
 }
 
@@ -128,14 +127,13 @@ func (s Storage) FindItemByID(id int) (core.Item, bool) {
 
 // StoreOrder save bucket to storage
 func (s Storage) StoreOrder(order core.Order) (int, error) {
-	sql := "INSERT INTO orders(customer_id) VALUES(?)"
-	db := configuration.Get().Connection
 	orderID := order.ID
-	tx, err := db.Begin()
+	tx, err := s.connection.Begin()
 	if err != nil {
 		log.Fatal(err)
 	}
 
+	sql := "INSERT INTO orders(customer_id) VALUES(?)"
 	stmt, err := tx.Prepare(sql)
 	if err != nil {
 		log.Fatal(err)
@@ -184,8 +182,7 @@ func (s Storage) FindOrderByID(id int) (core.Order, bool) {
 // StoreCustomer save client to storage
 func (s Storage) StoreCustomer(customer core.Customer) (int, error) {
 	sql := "INSERT INTO customers(id, name, phone) VALUES(?, ?, ?)"
-	db := configuration.Get().Connection
-	stmt, err := db.Prepare(sql)
+	stmt, err := s.connection.Prepare(sql)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -213,8 +210,7 @@ func (s Storage) StoreCustomer(customer core.Customer) (int, error) {
 // FindCustomerByID get client from storage
 func (s Storage) FindCustomerByID(id int) (core.Customer, bool) {
 	sql := "SELECT id, name, phone FROM customers WHERE id = ?"
-	db := configuration.Get().Connection
-	stmt, err := db.Prepare(sql)
+	stmt, err := s.connection.Prepare(sql)
 	if err != nil {
 		log.Fatal(err)
 	}

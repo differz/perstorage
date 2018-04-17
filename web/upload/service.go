@@ -76,9 +76,12 @@ func computeMD5(file *os.File) []byte {
 	return hash.Sum(result)
 }
 
+// PlaceOrderResponse ...
 type PlaceOrderResponse struct {
 	downloadLink string
 }
 
-func (r PlaceOrderResponse) OnResponse(orderID int) {
+// OnResponse ...
+func (r PlaceOrderResponse) OnResponse(orderLink string) {
+	r.downloadLink = orderLink
 }

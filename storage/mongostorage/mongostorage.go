@@ -20,12 +20,14 @@ func New() Storage {
 	}
 }
 
+// InitDB ...
 func (s Storage) InitDB() *sql.DB {
 	fmt.Println("InitDB<>")
 	return nil
 }
 
-func (s Storage) Migrate(db *sql.DB) {
+// Migrate ...
+func (s Storage) Migrate() {
 
 }
 

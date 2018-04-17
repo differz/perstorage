@@ -14,7 +14,7 @@ type Storager interface {
 	repositories.OrderRepository
 	repositories.ItemRepository
 	InitDB() *sql.DB
-	Migrate(db *sql.DB)
+	Migrate()
 	//	String() string
 }
 

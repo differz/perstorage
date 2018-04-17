@@ -17,7 +17,7 @@ type PlaceOrderInput interface {
 }
 
 type PlaceOrderOutput interface {
-	OnResponse(orderID int)
+	OnResponse(orderLink string)
 }
 
 func (r PlaceOrderRequest) GetSourceName() string {

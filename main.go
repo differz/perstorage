@@ -15,12 +15,11 @@ import (
 )
 
 func main() {
+	defer configuration.Close()
+
 	fmt.Println("Start...")
 	storage.Print()
 	web.Print()
-
-	cfg := configuration.Get()
-	defer cfg.Close()
 
 	con, _ := web.Get("root", 1)
 	fmt.Println(con)

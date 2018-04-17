@@ -1,6 +1,8 @@
 package usecases
 
 import (
+	"crypto/sha256"
+	"encoding/hex"
 	"fmt"
 	"strconv"
 	"strings"
@@ -23,7 +25,7 @@ func NewPlaceOrderUseCase() PlaceOrderUseCase {
 }
 
 func (u PlaceOrderUseCase) PlaceOrder(request contracts.PlaceOrderRequest, output contracts.PlaceOrderOutput) {
-	repo := configuration.Get().Storage
+	repo := configuration.GetStorage()
 
 	customerID, err := strconv.Atoi(strings.Replace(request.Phone, "+", "", 1))
 	if err != nil {
@@ -53,5 +55,15 @@ func (u PlaceOrderUseCase) PlaceOrder(request contracts.PlaceOrderRequest, outpu
 		return
 	}
 
-	output.OnResponse(order.ID)
+	orderLink := generateLink(order.ID, customer.ID)
+	output.OnResponse(orderLink)
+}
+
+func generateLink(orderID, customerID int) string {
+	key := "order#" + string(orderID) + ", customer:" + string(customerID)
+	hasher := sha256.New()
+	hasher.Write([]byte(key))
+	hash := hasher.Sum(nil)
+	hashHex := hex.EncodeToString(hash)
+	return hashHex
 }

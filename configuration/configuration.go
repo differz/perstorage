@@ -7,29 +7,34 @@ import (
 	"../storage"
 )
 
-type Config struct {
-	Storage    storage.Storager
-	Connection *sql.DB
+type config struct {
+	storage    storage.Storager
+	connection *sql.DB
 }
 
 var (
-	cfg  *Config
+	cfg  *config
 	once sync.Once
 )
 
-func Get() *Config {
+func get() *config {
 	once.Do(func() {
 		repo, _ := storage.Get("file", 1)
 
-		cfg = &Config{}
-		cfg.Storage = repo
-		cfg.Connection = repo.InitDB()
-
-		repo.Migrate(cfg.Connection)
+		cfg = &config{}
+		cfg.storage = repo
+		cfg.connection = repo.InitDB()
+		repo.Migrate()
 	})
 	return cfg
 }
 
-func (c Config) Close() {
-	c.Connection.Close()
+// GetStorage ...
+func GetStorage() storage.Storager {
+	return get().storage
+}
+
+// Close ...
+func Close() {
+	get().connection.Close()
 }
