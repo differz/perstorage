@@ -34,16 +34,16 @@ func (s Service) uploadFile(r *http.Request) (string, error) {
 	}
 	defer file.Close()
 
-	por := contracts.PlaceOrderRequest{}
-	por.Filename = handler.Filename
-	por.Dir = "./local/incoming/" + inMD5 + "/"
-	por.Phone = r.FormValue("phone")
-	por.Private = r.FormValue("private") == "private"
+	req := contracts.PlaceOrderRequest{}
+	req.Filename = handler.Filename
+	req.Dir = "./local/incoming/" + inMD5 + "/"
+	req.Phone = r.FormValue("phone")
+	req.Private = r.FormValue("private") == "private"
 
-	err = os.MkdirAll(por.Dir, os.ModePerm)
+	err = os.MkdirAll(req.Dir, os.ModePerm)
 	// TODO error
 
-	temp, err := os.OpenFile(por.GetSourceName(), os.O_RDWR|os.O_CREATE, 0666)
+	temp, err := os.OpenFile(req.GetSourceName(), os.O_RDWR|os.O_CREATE, 0666)
 	if err != nil {
 		fmt.Println("can't create file")
 		return "", err
@@ -51,11 +51,12 @@ func (s Service) uploadFile(r *http.Request) (string, error) {
 	defer temp.Close()
 
 	copyFile(file, temp, int(handler.Size))
-	por.MD5 = computeMD5(temp)
+	req.MD5 = computeMD5(temp)
 
-	s.placeOrder.PlaceOrder(por, PlaceOrderResponse{})
+	resp := PlaceOrderResponse{}
+	s.placeOrder.PlaceOrder(req, resp)
 
-	return temp.Name(), nil
+	return resp.downloadLink, nil
 }
 
 func copyFile(in multipart.File, out *os.File, dataSize int) {
@@ -76,10 +77,8 @@ func computeMD5(file *os.File) []byte {
 }
 
 type PlaceOrderResponse struct {
+	downloadLink string
 }
 
 func (r PlaceOrderResponse) OnResponse(orderID int) {
-}
-
-func init() {
 }

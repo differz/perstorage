@@ -25,9 +25,7 @@ func handler(w http.ResponseWriter, r *http.Request) {
 	//	fmt.Fprintf(w, "/upload: Server request, URL %s", r.URL.Path[1:])
 	fmt.Println("method:", r.Method)
 	if r.Method == "POST" {
-		//	repo, _ := storage.Get("file", 1)
 		srv := NewService()
-
 		name, err := srv.uploadFile(r)
 		if err == nil {
 			fmt.Println(name)
