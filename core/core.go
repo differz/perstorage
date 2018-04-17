@@ -7,6 +7,10 @@ type Customer struct {
 	Phone string
 }
 
+func (c Customer) IsNew() bool {
+	return c.ID == 0
+}
+
 // Item ...
 type Item struct {
 	ID         int
@@ -18,11 +22,19 @@ type Item struct {
 	SourceName string
 }
 
+func (i Item) IsNew() bool {
+	return i.ID == 0
+}
+
 // Order ...
 type Order struct {
 	ID       int
 	Customer Customer
 	Items    []Item
+}
+
+func (o Order) IsNew() bool {
+	return o.ID == 0
 }
 
 // Add file to bucket

@@ -3,7 +3,6 @@ package filestorage
 import (
 	"database/sql"
 	"fmt"
-	"hash/crc32"
 	"log"
 	"os"
 
@@ -103,10 +102,23 @@ func (s Storage) StoreItem(item core.Item) (int, error) {
 	}
 	defer stmt.Close()
 
-	stmt.Exec("", item.Filename, path, size, true)
+	res, err := stmt.Exec("", item.Filename, path, size, true)
+	if err != nil {
+		panic("Exec err:" + err.Error())
+		//TODO error
+	}
 
-	itemID := int(crc32.ChecksumIEEE([]byte(key)))
-	return itemID, nil
+	if item.IsNew() {
+		id, err := res.LastInsertId()
+		if err != nil {
+			println("Error:", err.Error())
+		} else {
+			println("LastInsertId:", id)
+		}
+		item.ID = int(id)
+	}
+
+	return item.ID, err
 }
 
 // FindItemByID get file from storage
@@ -118,6 +130,7 @@ func (s Storage) FindItemByID(id int) (core.Item, bool) {
 func (s Storage) StoreOrder(order core.Order) (int, error) {
 	sql := "INSERT INTO orders(order_id, customer_id, item_id) VALUES(?, ?, ?)"
 	db := configuration.Get().Connection
+	orderID := order.ID
 	tx, err := db.Begin()
 	if err != nil {
 		log.Fatal(err)
@@ -131,15 +144,28 @@ func (s Storage) StoreOrder(order core.Order) (int, error) {
 
 	for index, item := range order.Items {
 		fmt.Println(index)
-		_, err = stmt.Exec(order.ID, order.Customer.ID, item.ID)
+		res, err := stmt.Exec(orderID, order.Customer.ID, item.ID)
 		if err != nil {
 			log.Fatal(err)
 		}
+
+		if orderID == 0 {
+			id, err := res.LastInsertId()
+			if err != nil {
+				println("Error:", err.Error())
+			} else {
+				println("LastInsertId:", id)
+			}
+			orderID = int(id)
+		}
 	}
-	tx.Commit()
+	err = tx.Commit()
+	if order.IsNew() && err == nil {
+		order.ID = orderID
+	}
 
 	fmt.Println("StoreOrder<>")
-	return 0, nil
+	return order.ID, err
 }
 
 // FindOrderByID get bucket from storage
@@ -148,7 +174,7 @@ func (s Storage) FindOrderByID(id int) (core.Order, bool) {
 }
 
 // StoreCustomer save client to storage
-func (s Storage) StoreCustomer(item core.Customer) (int, error) {
+func (s Storage) StoreCustomer(customer core.Customer) (int, error) {
 	sql := "INSERT INTO customers(id, name, phone) VALUES(?, ?, ?)"
 	db := configuration.Get().Connection
 	stmt, err := db.Prepare(sql)
@@ -157,10 +183,23 @@ func (s Storage) StoreCustomer(item core.Customer) (int, error) {
 	}
 	defer stmt.Close()
 
-	stmt.Exec(item.ID, item.Name, item.Phone)
+	res, err := stmt.Exec(customer.ID, customer.Name, customer.Phone)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	if customer.IsNew() {
+		id, err := res.LastInsertId()
+		if err != nil {
+			println("Error:", err.Error())
+		} else {
+			println("LastInsertId:", id)
+		}
+		customer.ID = int(id)
+	}
 
 	fmt.Println("StoreCustomer<>")
-	return 0, nil
+	return customer.ID, err
 }
 
 // FindCustomerByID get client from storage
