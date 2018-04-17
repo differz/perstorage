@@ -1,13 +1,7 @@
 package contracts
 
 type TakeOrderRequest struct {
-	Filename string
-	Phone    string
-	Private  bool
-	//
-	OrderId     int
-	Subject     string
-	Description string
+	Link string
 }
 
 type TakeOrderInput interface {

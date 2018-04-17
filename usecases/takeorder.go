@@ -1,8 +1,10 @@
 package usecases
 
 import (
+	"fmt"
+
+	"../configuration"
 	"../contracts/usecases"
-	"../core"
 )
 
 // TakeOrderUseCase ...
@@ -21,10 +23,15 @@ func NewTakeOrderUseCase() TakeOrderUseCase {
 
 // TakeOrder ...
 func (u TakeOrderUseCase) TakeOrder(request contracts.TakeOrderRequest, output contracts.TakeOrderOutput) {
-	//filename := request.Filename
-	//repo := configuration.Get().Storage
+	link := request.Link
+	repo := configuration.GetStorage()
 
-	order := core.Order{}
+	order, ok := repo.FindOrderByLink(link)
+	if ok {
+		for _, item := range order.Items {
+			fmt.Println(item.SourceName)
+		}
+	}
 
 	output.OnResponse(order.ID)
 }

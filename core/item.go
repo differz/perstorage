@@ -4,7 +4,6 @@ package core
 type Item struct {
 	ID         int
 	Name       string
-	Value      []byte
 	Size       int
 	Available  bool
 	Filename   string

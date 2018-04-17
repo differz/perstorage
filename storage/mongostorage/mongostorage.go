@@ -53,6 +53,11 @@ func (s Storage) FindOrderByID(id int) (core.Order, bool) {
 	return core.Order{}, false
 }
 
+// FindOrderByLink get bucket from storage by link
+func (s Storage) FindOrderByLink(link string) (core.Order, bool) {
+	return core.Order{}, false
+}
+
 // StoreCustomer save client to storage
 func (s Storage) StoreCustomer(item core.Customer) (int, error) {
 	return 0, nil

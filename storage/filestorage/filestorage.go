@@ -176,7 +176,115 @@ func (s Storage) StoreOrder(order core.Order) (int, error) {
 
 // FindOrderByID get bucket from storage
 func (s Storage) FindOrderByID(id int) (core.Order, bool) {
-	return core.Order{}, false
+	sql := "SELECT id, customer_id FROM orders WHERE id = ?"
+	stmt, err := s.connection.Prepare(sql)
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer stmt.Close()
+
+	rows, err := stmt.Query(id)
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer rows.Close()
+
+	order := core.Order{}
+	customer := core.Customer{}
+	ok := false
+	if rows.Next() {
+		err = rows.Scan(&order.ID, &customer.ID)
+		if err != nil {
+			log.Fatal(err)
+		}
+		ok = true
+	}
+
+	if ok {
+		sql = "SELECT id, name, phone FROM customers WHERE id = ?"
+		stmt, err = s.connection.Prepare(sql)
+		if err != nil {
+			log.Fatal(err)
+		}
+		rows, err = stmt.Query(customer.ID)
+		if err != nil {
+			log.Fatal(err)
+		}
+		ok = false
+		if rows.Next() {
+			err = rows.Scan(&customer.ID, &customer.Name, &customer.Phone)
+			if err != nil {
+				log.Fatal(err)
+			}
+			ok = true
+			order.Customer = customer
+		}
+	}
+
+	if ok {
+		sql = "SELECT" +
+			"  i.id," +
+			"  i.name," +
+			"  i.filename," +
+			"  i.path," +
+			"  i.size," +
+			"  i.available" +
+			" FROM ordered_items AS oi" +
+			" LEFT JOIN items AS i" +
+			"	ON oi.item_id = i.id" +
+			" WHERE order_id = ?"
+		stmt, err = s.connection.Prepare(sql)
+		if err != nil {
+			log.Fatal(err)
+		}
+		rows, err = stmt.Query(order.ID)
+		if err != nil {
+			log.Fatal(err)
+		}
+		ok = false
+		for rows.Next() {
+			item := core.Item{}
+			err = rows.Scan(&item.ID, &item.Name, &item.Filename, &item.SourceName, &item.Size, &item.Available)
+			if err != nil {
+				log.Fatal(err)
+			}
+			ok = true
+			order.Add(item)
+		}
+	}
+
+	return order, ok
+}
+
+// FindOrderByLink get bucket from storage by link
+func (s Storage) FindOrderByLink(link string) (core.Order, bool) {
+	sql := "SELECT order_id FROM order_links WHERE link = ?"
+	stmt, err := s.connection.Prepare(sql)
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer stmt.Close()
+
+	rows, err := stmt.Query(link)
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer rows.Close()
+
+	order := core.Order{}
+	ok := false
+	if rows.Next() {
+		err = rows.Scan(&order.ID)
+		if err != nil {
+			log.Fatal(err)
+		}
+		ok = true
+	}
+
+	if ok {
+		order, ok = s.FindOrderByID(order.ID)
+	}
+	return order, ok
 }
 
 // StoreCustomer save client to storage
