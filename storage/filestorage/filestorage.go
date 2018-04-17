@@ -191,16 +191,13 @@ func (s Storage) FindOrderByID(id int) (core.Order, bool) {
 
 	order := core.Order{}
 	customer := core.Customer{}
-	ok := false
 	if rows.Next() {
 		err = rows.Scan(&order.ID, &customer.ID)
 		if err != nil {
 			log.Fatal(err)
 		}
-		ok = true
-	}
-	if !ok {
-		return order, ok
+	} else {
+		return order, false
 	}
 
 	sql = "SELECT id, name, phone FROM customers WHERE id = ?"
@@ -212,17 +209,14 @@ func (s Storage) FindOrderByID(id int) (core.Order, bool) {
 	if err != nil {
 		log.Fatal(err)
 	}
-	ok = false
 	if rows.Next() {
 		err = rows.Scan(&customer.ID, &customer.Name, &customer.Phone)
 		if err != nil {
 			log.Fatal(err)
 		}
-		ok = true
 		order.Customer = customer
-	}
-	if !ok {
-		return order, ok
+	} else {
+		return order, false
 	}
 
 	sql = "SELECT" +
@@ -244,7 +238,7 @@ func (s Storage) FindOrderByID(id int) (core.Order, bool) {
 	if err != nil {
 		log.Fatal(err)
 	}
-	ok = false
+	ok := false
 	for rows.Next() {
 		item := core.Item{}
 		err = rows.Scan(&item.ID, &item.Name, &item.Filename, &item.SourceName, &item.Size, &item.Available)
