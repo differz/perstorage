@@ -1,5 +1,7 @@
 package mongostorage
 
+// The MongoDB driver for Go
+// https://github.com/globalsign/mgo
 import (
 	"database/sql"
 	"fmt"

@@ -1,8 +1,6 @@
 package usecases
 
 import (
-	"crypto/sha256"
-	"encoding/hex"
 	"fmt"
 	"strconv"
 	"strings"
@@ -12,18 +10,21 @@ import (
 	"../core"
 )
 
+// PlaceOrderUseCase ...
 type PlaceOrderUseCase struct {
 	//
 	subject     string
 	description string
 }
 
+// NewPlaceOrderUseCase ...
 func NewPlaceOrderUseCase() PlaceOrderUseCase {
 	return PlaceOrderUseCase{
 		description: "new",
 	}
 }
 
+// PlaceOrder ...
 func (u PlaceOrderUseCase) PlaceOrder(request contracts.PlaceOrderRequest, output contracts.PlaceOrderOutput) {
 	repo := configuration.GetStorage()
 
@@ -55,15 +56,5 @@ func (u PlaceOrderUseCase) PlaceOrder(request contracts.PlaceOrderRequest, outpu
 		return
 	}
 
-	orderLink := generateLink(order.ID, customer.ID)
-	output.OnResponse(orderLink)
-}
-
-func generateLink(orderID, customerID int) string {
-	key := "order#" + string(orderID) + ", customer:" + string(customerID)
-	hasher := sha256.New()
-	hasher.Write([]byte(key))
-	hash := hasher.Sum(nil)
-	hashHex := hex.EncodeToString(hash)
-	return hashHex
+	output.OnResponse(order.Link())
 }

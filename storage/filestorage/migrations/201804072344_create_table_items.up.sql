@@ -1,1 +1,1 @@
-CREATE TABLE IF NOT EXISTS items ( id INTEGER NOT NULL PRIMARY KEY, name TEXT, filename TEXT, path TEXT, size INTEGER, available INTEGER )
+CREATE TABLE IF NOT EXISTS items ( id INTEGER NOT NULL PRIMARY KEY, name TEXT, filename TEXT, path TEXT, link TEXT, size INTEGER, available INTEGER )
