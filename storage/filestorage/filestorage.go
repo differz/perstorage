@@ -127,7 +127,6 @@ func (s Storage) FindItemByID(id int) (core.Item, bool) {
 
 // StoreOrder save bucket to storage
 func (s Storage) StoreOrder(order core.Order) (int, error) {
-	orderID := order.ID
 	tx, err := s.connection.Begin()
 	if err != nil {
 		log.Fatal(err)
@@ -152,23 +151,19 @@ func (s Storage) StoreOrder(order core.Order) (int, error) {
 		} else {
 			println("LastInsertId:", id)
 		}
-		orderID = int(id)
+		order.ID = int(id)
 	}
 
-	sql = "INSERT INTO ordered_items(order_id, customer_id, item_id) VALUES(?, ?, ?)"
+	sql = "INSERT INTO ordered_items(order_id, customer_id, item_id, link) VALUES(?, ?, ?, ?)"
 	stmt, err = tx.Prepare(sql)
 	for index, item := range order.Items {
 		fmt.Println(index)
-		_, err := stmt.Exec(orderID, order.Customer.ID, item.ID)
+		_, err := stmt.Exec(order.ID, order.Customer.ID, item.ID, order.Link())
 		if err != nil {
 			log.Fatal(err)
 		}
 	}
 	err = tx.Commit()
-
-	if order.IsNew() && err == nil {
-		order.ID = orderID
-	}
 
 	fmt.Println("StoreOrder<>")
 	return order.ID, err
