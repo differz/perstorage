@@ -1,15 +1,13 @@
 package configuration
 
 import (
-	"database/sql"
 	"sync"
 
 	"../storage"
 )
 
 type config struct {
-	storage    storage.Storager
-	connection *sql.DB
+	storage storage.Storager
 }
 
 var (
@@ -20,7 +18,7 @@ var (
 func get() *config {
 	once.Do(func() {
 		cfg = &config{}
-		cfg.storage, cfg.connection, _ = storage.Get("file", "./local/filestorage/")
+		cfg.storage, _ = storage.Get("file", "./local/filestorage/")
 	})
 	return cfg
 }
@@ -32,5 +30,5 @@ func GetStorage() storage.Storager {
 
 // Close ...
 func Close() {
-	get().connection.Close()
+	GetStorage().Close()
 }

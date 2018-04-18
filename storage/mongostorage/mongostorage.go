@@ -3,7 +3,6 @@ package mongostorage
 // The MongoDB driver for Go
 // https://github.com/globalsign/mgo
 import (
-	"database/sql"
 	"fmt"
 
 	"../../core"
@@ -23,9 +22,13 @@ func New() Storage {
 }
 
 // InitDB ...
-func (s Storage) InitDB(args ...string) *sql.DB {
+func (s Storage) InitDB(args ...string) {
 	fmt.Println("InitDB<>")
-	return nil
+}
+
+// Close defer db.Close()
+func (s Storage) Close() {
+
 }
 
 // Migrate ...

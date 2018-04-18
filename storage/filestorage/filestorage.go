@@ -29,11 +29,11 @@ func New() *Storage {
 	}
 }
 
-// InitDB ...
-func (s *Storage) InitDB(args ...string) *sql.DB {
+// InitDB ... dir = "./local/filestorage/"
+func (s *Storage) InitDB(args ...string) {
 	fmt.Println("InitDB file storage")
 
-	dir := "./local/filestorage/"
+	dir := args[0]
 	err := os.MkdirAll(dir, os.ModePerm)
 	fileDB := dir + "perstorage.db"
 
@@ -42,16 +42,12 @@ func (s *Storage) InitDB(args ...string) *sql.DB {
 		log.Fatal(err)
 	}
 
-	// db, _ := gorm.Open("sqlite3", "test.db")
-	// db.Exec("PRAGMA foreign_keys = ON")
-	// db.LogMode(true)
-	// db.AutoMigrate(&User{}, &Address{})
-	// fmt.Println(db.Save(&User{}).Error)
-	// fmt.Println(db.Save(&Address{}).Error)
-
 	s.migrate()
-	//	defer db.Close()
-	return s.connection
+}
+
+// Close defer db.Close()
+func (s Storage) Close() {
+	s.connection.Close()
 }
 
 // Migrate ...

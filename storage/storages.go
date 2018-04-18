@@ -1,7 +1,6 @@
 package storage
 
 import (
-	"database/sql"
 	"fmt"
 	"log"
 
@@ -13,7 +12,8 @@ type Storager interface {
 	repositories.CustomerRepository
 	repositories.OrderRepository
 	repositories.ItemRepository
-	InitDB(args ...string) *sql.DB
+	InitDB(args ...string)
+	Close()
 	//	String() string
 }
 
@@ -32,12 +32,13 @@ func Register(name string, storage Storager) {
 }
 
 // Get ...
-func Get(name string, args ...string) (Storager, *sql.DB, error) {
+func Get(name string, args ...string) (Storager, error) {
 	storage, ok := storages[name]
 	if !ok {
-		return nil, nil, fmt.Errorf("Unknown storage type: %s", name)
+		return nil, fmt.Errorf("Unknown storage type: %s", name)
 	}
-	return storage, storage.InitDB(args...), nil
+	storage.InitDB(args...)
+	return storage, nil
 }
 
 // Print ...
