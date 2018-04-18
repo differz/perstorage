@@ -30,7 +30,7 @@ func New() *Storage {
 }
 
 // InitDB ...
-func (s *Storage) InitDB() *sql.DB {
+func (s *Storage) InitDB(args ...string) *sql.DB {
 	fmt.Println("InitDB file storage")
 
 	dir := "./local/filestorage/"
@@ -49,12 +49,13 @@ func (s *Storage) InitDB() *sql.DB {
 	// fmt.Println(db.Save(&User{}).Error)
 	// fmt.Println(db.Save(&Address{}).Error)
 
+	s.migrate()
 	//	defer db.Close()
 	return s.connection
 }
 
 // Migrate ...
-func (s Storage) Migrate() {
+func (s Storage) migrate() {
 	driver, err := sqlite3.WithInstance(s.connection, &sqlite3.Config{})
 	//TODO: if err != nil {}
 	m, err := migrate.NewWithDatabaseInstance(

@@ -23,7 +23,7 @@ func New() Storage {
 }
 
 // InitDB ...
-func (s Storage) InitDB() *sql.DB {
+func (s Storage) InitDB(args ...string) *sql.DB {
 	fmt.Println("InitDB<>")
 	return nil
 }

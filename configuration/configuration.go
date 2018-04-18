@@ -19,12 +19,8 @@ var (
 
 func get() *config {
 	once.Do(func() {
-		repo, _ := storage.Get("file", 1)
-
 		cfg = &config{}
-		cfg.storage = repo
-		cfg.connection = repo.InitDB()
-		repo.Migrate()
+		cfg.storage, cfg.connection, _ = storage.Get("file", "./local/filestorage/")
 	})
 	return cfg
 }

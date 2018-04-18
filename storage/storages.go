@@ -13,8 +13,7 @@ type Storager interface {
 	repositories.CustomerRepository
 	repositories.OrderRepository
 	repositories.ItemRepository
-	InitDB() *sql.DB
-	Migrate()
+	InitDB(args ...string) *sql.DB
 	//	String() string
 }
 
@@ -33,12 +32,12 @@ func Register(name string, storage Storager) {
 }
 
 // Get ...
-func Get(name string, x int) (Storager, error) {
+func Get(name string, args ...string) (Storager, *sql.DB, error) {
 	storage, ok := storages[name]
 	if !ok {
-		return nil, fmt.Errorf("Unknown storage type: %s", name)
+		return nil, nil, fmt.Errorf("Unknown storage type: %s", name)
 	}
-	return storage, nil
+	return storage, storage.InitDB(args...), nil
 }
 
 // Print ...
