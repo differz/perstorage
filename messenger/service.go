@@ -1,4 +1,4 @@
-package messanger
+package messenger
 
 import (
 	"../contracts/usecases"
@@ -17,6 +17,7 @@ func NewService() Service {
 	}
 }
 
+// OrderMessage ...
 func (s Service) OrderMessage(request contracts.OrderMessageRequest, output contracts.OrderMessageOutput) {
 
 }
