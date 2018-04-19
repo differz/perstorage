@@ -5,10 +5,14 @@ import (
 	"net/http"
 
 	"./configuration"
+	"./messenger"
 	"./storage"
+	"./web"
+
+	// used modules
+	_ "./messenger/telegram"
 	_ "./storage/filestorage"
 	_ "./storage/mongostorage"
-	"./web"
 	_ "./web/download"
 	_ "./web/root"
 	_ "./web/upload"
@@ -18,6 +22,7 @@ func main() {
 	defer configuration.Close()
 
 	fmt.Println("Start...")
+	messenger.Print()
 	storage.Print()
 	web.Print()
 
