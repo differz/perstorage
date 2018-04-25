@@ -12,6 +12,7 @@ type Storager interface {
 	repositories.CustomerRepository
 	repositories.OrderRepository
 	repositories.ItemRepository
+	repositories.MessengerRepository
 	InitDB(args ...string)
 	Close()
 	//	String() string

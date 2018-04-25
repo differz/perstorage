@@ -71,6 +71,16 @@ func (s Storage) FindCustomerByID(id int) (core.Customer, bool) {
 	return core.Customer{}, false
 }
 
+// StoreCustomerMessenger save chat id to storage by customer
+func (s Storage) StoreCustomerMessenger(customer core.Customer, messengerName string, chatID int) error {
+	return nil
+}
+
+// FindCustomerChatID  get customer's chat id
+func (s Storage) FindCustomerChatID(customer core.Customer, messengerName string) (int, bool) {
+	return 0, false
+}
+
 func init() {
 	storage.Register("mongo", New())
 }

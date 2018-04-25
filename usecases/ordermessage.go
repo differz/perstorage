@@ -1,7 +1,12 @@
 package usecases
 
 import (
-	"../contracts/usecases"
+	"fmt"
+	"strconv"
+	"strings"
+
+	"../configuration"
+	"../core"
 )
 
 // OrderMessageUseCase ...
@@ -19,7 +24,27 @@ func NewOrderMessageUseCase() OrderMessageUseCase {
 }
 
 // OrderMessage ...
-func (u OrderMessageUseCase) OrderMessage(request contracts.OrderMessageRequest, output contracts.OrderMessageOutput) {
+func (u OrderMessageUseCase) OrderMessage(phone string, message string) {
+	// TODO: @Inject
+	repo := configuration.GetStorage()
+	msgr := configuration.GetMessenger()
 
-	output.OnResponse("order.Link()")
+	// TODO: find customer by phone
+	customerID, _ := strconv.Atoi(strings.Replace(phone, "+", "", 1))
+
+	customer := core.Customer{ID: customerID}
+	chatID, ok := repo.FindCustomerChatID(customer, "telegram") //TODO: @Inject
+	if !ok {
+		fmt.Printf("no chat id for customer %d", customerID)
+	}
+
+	msgr.ShowOrder(chatID, message)
+
 }
+
+// TODO: request
+/*
+func (u OrderMessageUseCase) OrderMessage(request contracts.OrderMessageRequest, output contracts.OrderMessageOutput) {
+	output.OnResponse(request.Phone, request.Message)
+}
+*/

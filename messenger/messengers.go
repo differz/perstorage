@@ -7,9 +7,11 @@ import (
 	"../contracts/messengers"
 )
 
-// Storager ...
+// Messenger ...
 type Messenger interface {
-	messengers.OrderPost
+	messengers.ListenChatInput
+	messengers.OrderPostInput
+	Init(args ...string)
 }
 
 var ms = make(map[string]Messenger)
@@ -32,6 +34,7 @@ func Get(name string, args ...string) (Messenger, error) {
 	if !ok {
 		return nil, fmt.Errorf("Unknown messenger type: %s", name)
 	}
+	messenger.Init(args...)
 	return messenger, nil
 }
 

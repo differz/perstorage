@@ -4,6 +4,7 @@ import (
 	"net/http"
 	"strings"
 
+	"../../configuration"
 	"../../contracts/usecases"
 	"../../usecases"
 )
@@ -17,7 +18,7 @@ type Service struct {
 // NewService constructor
 func NewService(uri string) Service {
 	return Service{
-		takeOrder: usecases.NewTakeOrderUseCase(),
+		takeOrder: usecases.NewTakeOrderUseCase(configuration.GetStorage()),
 		uri:       uri,
 	}
 }

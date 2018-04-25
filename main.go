@@ -6,6 +6,7 @@ import (
 
 	"./configuration"
 	"./messenger"
+	"./messenger/service"
 	"./storage"
 	"./web"
 
@@ -28,6 +29,9 @@ func main() {
 
 	con, _ := web.Get("root", 1)
 	fmt.Println(con)
+
+	srv := messengers.NewService()
+	srv.ListenChat()
 
 	http.ListenAndServe(":8081", nil)
 }

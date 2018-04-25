@@ -1,7 +1,9 @@
 package contracts
 
+/*
 type OrderMessageRequest struct {
-	Phone string
+	Phone   string
+	Message string
 }
 
 type OrderMessageInput interface {
@@ -9,5 +11,10 @@ type OrderMessageInput interface {
 }
 
 type OrderMessageOutput interface {
-	OnResponse(orderLink string)
+	OnResponse(phone string, orderLink string)
+}
+*/
+
+type OrderMessageInput interface {
+	OrderMessage(phone string, orderLink string)
 }

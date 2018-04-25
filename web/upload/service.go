@@ -8,6 +8,7 @@ import (
 	"net/http"
 	"os"
 
+	"../../configuration"
 	"../../contracts/usecases"
 	"../../usecases"
 	"gopkg.in/cheggaaa/pb.v1"
@@ -21,7 +22,7 @@ type Service struct {
 // NewService constructor
 func NewService() Service {
 	return Service{
-		placeOrder: usecases.NewPlaceOrderUseCase(),
+		placeOrder: usecases.NewPlaceOrderUseCase(configuration.GetStorage()),
 	}
 }
 
@@ -53,7 +54,7 @@ func (s Service) uploadFile(r *http.Request) (string, error) {
 	copyFile(file, temp, int(handler.Size))
 	req.MD5 = computeMD5(temp)
 
-	resp := PlaceOrderResponse{}
+	resp := PlaceOrderResponse{phone: req.Phone}
 	s.placeOrder.PlaceOrder(req, resp)
 
 	return resp.downloadLink, nil

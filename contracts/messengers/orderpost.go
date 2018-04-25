@@ -1,8 +1,6 @@
 package messengers
 
-import "../../core"
-
-// OrderPost ...
-type OrderPost interface {
-	ShowOrder(item core.Order) error
+// OrderPostInput ...
+type OrderPostInput interface {
+	ShowOrder(chatID int, message string) error
 }

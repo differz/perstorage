@@ -7,7 +7,6 @@ type PlaceOrderRequest struct {
 	Private  bool
 	MD5      []byte
 	//
-	OrderId     int
 	Subject     string
 	Description string
 }
@@ -17,7 +16,7 @@ type PlaceOrderInput interface {
 }
 
 type PlaceOrderOutput interface {
-	OnResponse(orderLink string)
+	OnResponse(phone, orderLink string)
 }
 
 func (r PlaceOrderRequest) GetSourceName() string {

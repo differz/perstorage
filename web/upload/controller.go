@@ -22,8 +22,6 @@ func newController() Controller {
 }
 
 func handler(w http.ResponseWriter, r *http.Request) {
-	//	fmt.Fprintf(w, "/upload: Server request, URL %s", r.URL.Path[1:])
-	fmt.Println("method:", r.Method)
 	if r.Method == "POST" {
 		srv := NewService()
 		name, err := srv.uploadFile(r)

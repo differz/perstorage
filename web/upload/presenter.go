@@ -1,15 +1,17 @@
 package upload
 
-import "../../messenger"
+import "../../messenger/service"
 
 // PlaceOrderResponse ...
 type PlaceOrderResponse struct {
 	downloadLink string
+	phone        string
 }
 
 // OnResponse ...
-func (r PlaceOrderResponse) OnResponse(orderLink string) {
+func (r PlaceOrderResponse) OnResponse(phone, orderLink string) {
 	r.downloadLink = orderLink
-	ms := messenger.NewService()
-	_ = ms
+	r.phone = phone
+	ms := messengers.NewService()
+	ms.OrderMessage(phone, orderLink)
 }
