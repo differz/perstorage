@@ -16,7 +16,7 @@ import (
 	"../../storage"
 )
 
-// Storage ...
+// Storage object for file db
 type Storage struct {
 	name       string
 	connection *sql.DB
@@ -29,15 +29,16 @@ func New() *Storage {
 	}
 }
 
-// InitDB ... dir = "./local/filestorage/"
-func (s *Storage) InitDB(args ...string) {
-	fmt.Println("InitDB file storage")
+// Init db and create connection. Do migration if needed.
+// By default dir = "./local/filestorage/"
+func (s *Storage) Init(args ...string) {
+	fmt.Println("Init file storage")
 
 	dir := args[0]
 	err := os.MkdirAll(dir, os.ModePerm)
-	fileDB := dir + "perstorage.db"
+	file := dir + "perstorage.db"
 
-	s.connection, err = sql.Open("sqlite3", fileDB)
+	s.connection, err = sql.Open("sqlite3", file)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -45,34 +46,32 @@ func (s *Storage) InitDB(args ...string) {
 	s.migrate()
 }
 
+func (s Storage) migrate() {
+	driver, err := sqlite3.WithInstance(s.connection, &sqlite3.Config{})
+	if err != nil {
+		log.Fatal("can't init sqlite driver", err)
+	}
+	m, err := migrate.NewWithDatabaseInstance(
+		"file://./storage/filestorage/migrations",
+		"sqlite3", driver)
+	if err != nil {
+		log.Fatal("can't get sqlite migration instance", err)
+	}
+	m.Up()
+}
+
 // Close defer db.Close()
 func (s Storage) Close() {
 	s.connection.Close()
 }
 
-// Migrate ...
-func (s Storage) migrate() {
-	driver, err := sqlite3.WithInstance(s.connection, &sqlite3.Config{})
-	//TODO: if err != nil {}
-	m, err := migrate.NewWithDatabaseInstance(
-		"file://./storage/filestorage/migrations",
-		"sqlite3", driver)
-	if err != nil {
-		return
-	}
-	m.Up()
-}
-
 // StoreItem save file to storage
 func (s Storage) StoreItem(item core.Item) (int, error) {
-
-	key := "salt:" + item.Filename
-
-	// TODO: namespace
-	ns, err := uuid.FromString("6ba7b810-9dad-11d1-80b4-00c04fd430c8")
+	ns, err := uuid.FromString("6ba7b810-9dad-11d1-80b4-00c04fd430c8") // TODO: namespace
 	if err != nil {
 		fmt.Printf("Something went wrong: %s", err)
 	}
+	key := "salt:" + item.Filename
 	u5 := uuid.NewV5(ns, key)
 	if err != nil {
 		fmt.Printf("Something went wrong: %s", err)
@@ -99,8 +98,8 @@ func (s Storage) StoreItem(item core.Item) (int, error) {
 
 	res, err := stmt.Exec("", item.Filename, path, size, true)
 	if err != nil {
-		panic("Exec err:" + err.Error())
-		//TODO error
+		log.Println("can't insert item into db " + err.Error())
+		return 0, err
 	}
 
 	if item.IsNew() {
@@ -344,11 +343,10 @@ func (s Storage) StoreCustomerMessenger(customer core.Customer, messengerName st
 	if err != nil {
 		log.Fatal(err)
 	}
-
 	return err
 }
 
-// FindCustomerChatID  get customer's chat id
+// FindCustomerChatID get customer's chat id
 func (s Storage) FindCustomerChatID(customer core.Customer, messengerName string) (int, bool) {
 	sql := "SELECT chat_id FROM customer_messengers WHERE customer_id = ? AND messenger = ?"
 	stmt, err := s.connection.Prepare(sql)
@@ -372,7 +370,6 @@ func (s Storage) FindCustomerChatID(customer core.Customer, messengerName string
 		}
 		ok = true
 	}
-
 	return chatID, ok
 }
 

@@ -9,7 +9,7 @@ import (
 	"../../storage"
 )
 
-// Storage ...
+// Storage object for mongo db
 type Storage struct {
 	name string
 }
@@ -21,18 +21,18 @@ func New() Storage {
 	}
 }
 
-// InitDB ...
-func (s Storage) InitDB(args ...string) {
-	fmt.Println("InitDB<>")
+// Init db and create connection. Do migration if needed.
+func (s Storage) Init(args ...string) {
+	fmt.Println("Init<>")
+	s.migrate()
+}
+
+func (s Storage) migrate() {
+
 }
 
 // Close defer db.Close()
 func (s Storage) Close() {
-
-}
-
-// Migrate ...
-func (s Storage) Migrate() {
 
 }
 

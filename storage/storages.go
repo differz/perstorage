@@ -9,11 +9,11 @@ import (
 
 // Storager ...
 type Storager interface {
-	repositories.CustomerRepository
-	repositories.OrderRepository
-	repositories.ItemRepository
-	repositories.MessengerRepository
-	InitDB(args ...string)
+	repositories.Customer
+	repositories.Order
+	repositories.Item
+	repositories.Messenger
+	Init(args ...string)
 	Close()
 	//	String() string
 }
@@ -38,7 +38,7 @@ func Get(name string, args ...string) (Storager, error) {
 	if !ok {
 		return nil, fmt.Errorf("Unknown storage type: %s", name)
 	}
-	storage.InitDB(args...)
+	storage.Init(args...)
 	return storage, nil
 }
 
