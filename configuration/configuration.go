@@ -26,17 +26,17 @@ func get() *config {
 	return cfg
 }
 
-// GetMessenger ...
+// GetMessenger takes messenger @Bean
 func GetMessenger() messenger.Messenger {
 	return get().messenger
 }
 
-// GetStorage ...
+// GetStorage take storage @Bean
 func GetStorage() storage.Storager {
 	return get().storage
 }
 
-// Close ...
+// Close all connections before exit
 func Close() {
 	GetStorage().Close()
 }

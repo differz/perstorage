@@ -1,6 +1,6 @@
 package core
 
-// Item ...
+// Item contains single file
 type Item struct {
 	ID         int
 	Name       string
@@ -10,7 +10,7 @@ type Item struct {
 	SourceName string
 }
 
-// IsNew ...
+// IsNew returns true if it is new item
 func (i Item) IsNew() bool {
 	return i.ID == 0
 }

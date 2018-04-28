@@ -1,13 +1,22 @@
 package core
 
-// Customer ...
+import (
+	"strconv"
+	"strings"
+)
+
+// Customer object identifies customer by phone number
 type Customer struct {
 	ID    int
 	Name  string
 	Phone string
 }
 
-// IsNew ...
+// IsNew returns true if it is new customer
 func (c Customer) IsNew() bool {
 	return c.ID == 0
+}
+
+func GetCustomerIDByPhone(phone string) (int, error) {
+	return strconv.Atoi(strings.Replace(phone, "+", "", 1))
 }

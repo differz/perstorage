@@ -9,7 +9,7 @@ import (
 	"gopkg.in/telegram-bot-api.v4"
 )
 
-// Messenge ...
+// Messenge telegram object
 type Messenge struct {
 	name string
 	bot  *tgbotapi.BotAPI
@@ -22,18 +22,18 @@ func New() *Messenge {
 	}
 }
 
-// Init ...
+// Init connect to API by token
 func (m *Messenge) Init(args ...string) {
 	fmt.Println("Init telegram")
 	token := args[0]
 	bot, err := tgbotapi.NewBotAPI(token)
 	if err != nil {
-		log.Panic(err)
+		log.Panic("can't connect with token "+token, err)
 	}
 	m.bot = bot
 }
 
-// ListenChat ...
+// ListenChat send all new messages to output interface
 func (m Messenge) ListenChat(output messengers.ListenChatOutput) {
 	bot := m.bot
 	tgu := tgbotapi.NewUpdate(0)
@@ -63,7 +63,7 @@ func (m Messenge) ListenChat(output messengers.ListenChatOutput) {
 	}
 }
 
-// ShowOrder ...
+// ShowOrder place order details in chat message
 func (m Messenge) ShowOrder(chatID int, message string) error {
 	// TODO: add server
 	downloadLink := "http://localhost:8081/download/" + message

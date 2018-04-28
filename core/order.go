@@ -5,14 +5,14 @@ import (
 	"encoding/hex"
 )
 
-// Order ...
+// Order contains several files which places at ones
 type Order struct {
 	ID       int
 	Customer Customer
 	Items    []Item
 }
 
-// IsNew ...
+// IsNew returns true if it is new order
 func (o Order) IsNew() bool {
 	return o.ID == 0
 }
@@ -23,12 +23,12 @@ func (o *Order) Add(item Item) error {
 	return nil
 }
 
-// Link ...
+// Link create order hash based on orderID & customerID
 func (o *Order) Link() string {
-	key := "order#" + string(o.ID) + ", customer:" + string(o.Customer.ID)
+	key := "order#" + string(o.ID) + 
+	       "customer:" + string(o.Customer.ID)
 	hasher := sha256.New()
 	hasher.Write([]byte(key))
 	hash := hasher.Sum(nil)
-	hashHex := hex.EncodeToString(hash)
-	return hashHex
+	return hex.EncodeToString(hash)
 }

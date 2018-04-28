@@ -2,8 +2,6 @@ package usecases
 
 import (
 	"fmt"
-	"strconv"
-	"strings"
 
 	"../contracts/usecases"
 	"../core"
@@ -28,8 +26,7 @@ func NewPlaceOrderUseCase(repo storage.Storager) PlaceOrderUseCase {
 
 // PlaceOrder ...
 func (u PlaceOrderUseCase) PlaceOrder(request contracts.PlaceOrderRequest, output contracts.PlaceOrderOutput) {
-
-	customerID, err := strconv.Atoi(strings.Replace(request.Phone, "+", "", 1))
+	customerID, err := core.GetCustomerIDByPhone(request.Phone)
 	if err != nil {
 		// TODO error
 	}
