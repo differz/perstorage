@@ -2,8 +2,8 @@ package upload
 
 import (
 	"crypto/md5"
-	"fmt"
 	"io"
+	"log"
 	"mime/multipart"
 	"net/http"
 	"os"
@@ -31,6 +31,7 @@ func (s Service) uploadFile(r *http.Request) (string, error) {
 	inMD5 := r.FormValue("MD5")
 	file, handler, err := r.FormFile("uploadfile")
 	if err != nil {
+		log.Printf("can't get upload file %e", err)
 		return "", err
 	}
 	defer file.Close()
@@ -42,17 +43,20 @@ func (s Service) uploadFile(r *http.Request) (string, error) {
 	req.Private = r.FormValue("private") == "private"
 
 	err = os.MkdirAll(req.Dir, os.ModePerm)
-	// TODO error
+	if err != nil {
+		log.Printf("can't create directory %s %e", req.Dir, err)
+		return "", err
+	}
 
 	temp, err := os.OpenFile(req.GetSourceName(), os.O_RDWR|os.O_CREATE, 0666)
 	if err != nil {
-		fmt.Println("can't create file")
+		log.Printf("can't create file %e", err)
 		return "", err
 	}
-	defer temp.Close()
 
 	copyFile(file, temp, int(handler.Size))
 	req.MD5 = computeMD5(temp)
+	temp.Close()
 
 	resp := PlaceOrderResponse{phone: req.Phone}
 	s.placeOrder.PlaceOrder(req, resp)

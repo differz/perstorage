@@ -83,7 +83,13 @@ func (s Storage) StoreItem(item core.Item) (int, error) {
 	path := dir + item.Filename
 
 	err = os.MkdirAll(dir, os.ModePerm)
-	os.Rename(item.SourceName, path)
+	if err != nil {
+		log.Printf("can't create directory %s %e", dir, err)
+	}
+	err = os.Rename(item.SourceName, path)
+	if err != nil {
+		log.Printf("can't rename file %s to %s %e", item.SourceName, path, err)
+	}
 
 	fi, err := os.Stat(path)
 	size := int64(-1)
@@ -94,20 +100,20 @@ func (s Storage) StoreItem(item core.Item) (int, error) {
 	sql := "INSERT INTO items(name, filename, path, size, available) VALUES(?, ?, ?, ?, ?)"
 	stmt, err := s.connection.Prepare(sql)
 	if err != nil {
-		log.Fatal(err)
+		log.Fatal("prepared statement for table items ", err)
 	}
 	defer stmt.Close()
 
 	res, err := stmt.Exec("", item.Filename, path, size, true)
 	if err != nil {
-		log.Println("can't insert item into db " + err.Error())
+		log.Printf("can't insert item into db %e", err)
 		return 0, err
 	}
 
 	if item.IsNew() {
 		id, err := res.LastInsertId()
 		if err != nil {
-			println("Error:", err.Error())
+			log.Printf("error get last inserted id for item %e", err)
 		}
 		item.ID = int(id)
 	}
