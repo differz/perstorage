@@ -1,42 +1,54 @@
 package configuration
 
 import (
+	"encoding/json"
+	"fmt"
+	"log"
+	"os"
 	"sync"
 
-	"../messenger"
-	"../storage"
+	"../common"
 )
 
 type config struct {
-	storage   storage.Storager
-	messenger messenger.Messenger
+	ConfigName    string
+	StorageName   string
+	StorageArgs   string
+	MessengerName string
+	MessengerKey  string
 }
+
+const (
+	component = "configuration"
+	cfgFile   = "config.json"
+)
 
 var (
 	cfg  *config
 	once sync.Once
 )
 
-func get() *config {
+func Get() *config {
 	once.Do(func() {
 		cfg = &config{}
-		cfg.storage, _ = storage.Get("file", "./local/filestorage/")
-		cfg.messenger, _ = messenger.Get("telegram", "529441026:AAEVlmwD87qxmP-dLsu5EwFovHVyKi2iVfE22")
+		cfg.read()
 	})
 	return cfg
 }
 
-// GetMessenger takes messenger @Bean
-func GetMessenger() messenger.Messenger {
-	return get().messenger
-}
-
-// GetStorage take storage @Bean
-func GetStorage() storage.Storager {
-	return get().storage
-}
-
-// Close all connections before exit
-func Close() {
-	GetStorage().Close()
+func (conf *config) read() {
+	file, err := os.Open(cfgFile)
+	if err != nil {
+		msg := fmt.Sprintf("can't read file %s", cfgFile)
+		common.ContextUpMessage(component, msg)
+		log.Fatal(msg)
+	}
+	decoder := json.NewDecoder(file)
+	err = decoder.Decode(conf)
+	if err != nil {
+		msg := fmt.Sprintf("error parsing file %s, %e ", cfgFile, err)
+		common.ContextUpMessage(component, msg)
+		log.Fatal(msg)
+	}
+	common.ContextUpMessage(component, fmt.Sprint(cfg))
 }

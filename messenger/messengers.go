@@ -4,41 +4,50 @@ import (
 	"fmt"
 	"log"
 
+	"../common"
 	"../contracts/messengers"
 )
 
-// Messenger ...
+// Messenger consist of all messengers contracts that each should implement
 type Messenger interface {
 	messengers.ListenChatInput
 	messengers.OrderPostInput
-	Init(args ...string)
+	Init(args ...string) error
+	Available() bool
 }
+
+const component = "messenger"
 
 var ms = make(map[string]Messenger)
 
-// Register ...
+// Register messenger into factory by name
 func Register(name string, messenger Messenger) {
 	if messenger == nil {
-		log.Panicf("Messenger factory %s does not exist", name)
+		log.Panicf("messenger factory %s does not exist", name)
 	}
 	_, registered := ms[name]
 	if registered {
-		log.Printf("Messenger %s already registered", name)
+		log.Printf("messenger %s already registered", name)
 	}
 	ms[name] = messenger
 }
 
-// Get ...
+// Get messenger by name from factory
 func Get(name string, args ...string) (Messenger, error) {
 	messenger, ok := ms[name]
 	if !ok {
-		return nil, fmt.Errorf("Unknown messenger type: %s", name)
+		return nil, fmt.Errorf("unknown messenger type: %s", name)
 	}
 	messenger.Init(args...)
 	return messenger, nil
 }
 
-// Print ...
+// String presents view of factory map
+func String() string {
+	return fmt.Sprint(ms)
+}
+
+// Print view of factory map to console
 func Print() {
-	fmt.Println(ms)
+	common.ContextUpMessage(component, String())
 }

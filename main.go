@@ -1,10 +1,10 @@
 package main
 
 import (
-	"fmt"
 	"net/http"
 
-	"./configuration"
+	"./common"
+	"./configuration/context"
 	"./messenger"
 	"./messenger/service"
 	"./storage"
@@ -20,15 +20,15 @@ import (
 )
 
 func main() {
-	defer configuration.Close()
+	defer context.Close()
 
-	fmt.Println("Start...")
+	common.ContextUpMessage("application", "start...")
 	messenger.Print()
 	storage.Print()
 	web.Print()
 
-	con, _ := web.Get("root", 1)
-	fmt.Println(con)
+	//con, _ := web.Get("root")
+	//fmt.Println(con)
 
 	srv := messengers.NewService()
 	srv.ListenChat()

@@ -8,7 +8,7 @@ import (
 	"net/http"
 	"os"
 
-	"../../configuration"
+	"../../configuration/context"
 	"../../contracts/usecases"
 	"../../usecases"
 	"gopkg.in/cheggaaa/pb.v1"
@@ -22,7 +22,7 @@ type Service struct {
 // NewService constructor
 func NewService() Service {
 	return Service{
-		placeOrder: usecases.NewPlaceOrderUseCase(configuration.GetStorage()),
+		placeOrder: usecases.NewPlaceOrderUseCase(context.Storage()),
 	}
 }
 

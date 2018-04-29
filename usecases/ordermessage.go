@@ -5,7 +5,7 @@ import (
 	"strconv"
 	"strings"
 
-	"../configuration"
+	"../configuration/context"
 	"../core"
 )
 
@@ -26,8 +26,8 @@ func NewOrderMessageUseCase() OrderMessageUseCase {
 // OrderMessage ...
 func (u OrderMessageUseCase) OrderMessage(phone string, message string) {
 	// TODO: @Inject
-	repo := configuration.GetStorage()
-	msgr := configuration.GetMessenger()
+	repo := context.Storage()
+	msgr := context.Messenger()
 
 	// TODO: find customer by phone
 	customerID, _ := strconv.Atoi(strings.Replace(phone, "+", "", 1))

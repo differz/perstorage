@@ -81,6 +81,10 @@ func (s Storage) FindCustomerChatID(customer core.Customer, messengerName string
 	return 0, false
 }
 
+func (s Storage) String() string {
+	return s.name
+}
+
 func init() {
 	storage.Register("mongo", New())
 }

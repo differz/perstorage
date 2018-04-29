@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"log"
 
+	"../../common"
 	"../../contracts/messengers"
 	"../../messenger"
 	"gopkg.in/telegram-bot-api.v4"
@@ -15,6 +16,8 @@ type Messenge struct {
 	bot  *tgbotapi.BotAPI
 }
 
+const component = "telegram"
+
 // New create instance. Init method has pointer receiver
 func New() *Messenge {
 	return &Messenge{
@@ -23,18 +26,28 @@ func New() *Messenge {
 }
 
 // Init connect to API by token
-func (m *Messenge) Init(args ...string) {
-	fmt.Println("Init telegram")
+func (m *Messenge) Init(args ...string) error {
+	common.ContextUpMessage(component, "init telegram token")
 	token := args[0]
 	bot, err := tgbotapi.NewBotAPI(token)
 	if err != nil {
-		log.Panic("can't connect with token "+token, err)
+		log.Println("can't connect with token ", token, " ", err)
+	} else {
+		m.bot = bot
 	}
-	m.bot = bot
+	return err
+}
+
+// Available true if telegram api is on
+func (m Messenge) Available() bool {
+	return m.bot != nil
 }
 
 // ListenChat send all new messages to output interface
 func (m Messenge) ListenChat(output messengers.ListenChatOutput) {
+	if !m.Available() {
+		return
+	}
 	bot := m.bot
 	tgu := tgbotapi.NewUpdate(0)
 	tgu.Timeout = 60
@@ -65,6 +78,9 @@ func (m Messenge) ListenChat(output messengers.ListenChatOutput) {
 
 // ShowOrder place order details in chat message
 func (m Messenge) ShowOrder(chatID int, message string) error {
+	if !m.Available() {
+		return fmt.Errorf("bot not available")
+	}
 	// TODO: add server
 	downloadLink := "http://localhost:8081/download/" + message
 	msg := tgbotapi.NewMessage(int64(chatID), downloadLink)
@@ -72,6 +88,10 @@ func (m Messenge) ShowOrder(chatID int, message string) error {
 	return nil
 }
 
+func (m Messenge) String() string {
+	return m.name
+}
+
 func init() {
-	messenger.Register("telegram", New())
+	messenger.Register(component, New())
 }

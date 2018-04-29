@@ -17,6 +17,7 @@ func (c Customer) IsNew() bool {
 	return c.ID == 0
 }
 
+// GetCustomerIDByPhone takes customer id by phone number
 func GetCustomerIDByPhone(phone string) (int, error) {
 	return strconv.Atoi(strings.Replace(phone, "+", "", 1))
 }

@@ -12,6 +12,7 @@ import (
 	// sqlite
 	_ "github.com/mattes/migrate/source/file"
 
+	"../../common"
 	"../../core"
 	"../../storage"
 )
@@ -21,6 +22,8 @@ type Storage struct {
 	name       string
 	connection *sql.DB
 }
+
+const component = "file"
 
 // New create storage instance
 func New() *Storage {
@@ -32,8 +35,7 @@ func New() *Storage {
 // Init db and create connection. Do migration if needed.
 // By default dir = "./local/filestorage/"
 func (s *Storage) Init(args ...string) {
-	fmt.Println("Init file storage")
-
+	common.ContextUpMessage(component, "init file storage")
 	dir := args[0]
 	err := os.MkdirAll(dir, os.ModePerm)
 	file := dir + "perstorage.db"
@@ -373,6 +375,10 @@ func (s Storage) FindCustomerChatID(customer core.Customer, messengerName string
 	return chatID, ok
 }
 
+func (s Storage) String() string {
+	return s.name
+}
+
 func init() {
-	storage.Register("file", New())
+	storage.Register(component, New())
 }

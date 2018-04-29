@@ -1,7 +1,7 @@
 package messengers
 
 import (
-	"../../configuration"
+	"../../configuration/context"
 	"../../contracts/usecases"
 	"../../usecases"
 )
@@ -15,7 +15,7 @@ type Service struct {
 // NewService constructor
 func NewService() Service {
 	return Service{
-		customerMessenger: usecases.NewCustomerMessengerUseCase(configuration.GetStorage(), configuration.GetMessenger()),
+		customerMessenger: usecases.NewCustomerMessengerUseCase(context.Storage(), context.Messenger()),
 		orderMessage:      usecases.NewOrderMessageUseCase(),
 	}
 }

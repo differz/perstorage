@@ -1,0 +1,7 @@
+{
+  "ConfigName"    : "main",
+  "StorageName"   : "file",
+  "StorageArgs"   : "./local/filestorage/",
+  "MessengerName" : "telegram",
+  "MessengerKey"  : "529441026:AAFSIDbMBsdSaVNcQFIh4upIqL_KbU_oUGY22"
+}
