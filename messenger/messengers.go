@@ -14,6 +14,7 @@ type Messenger interface {
 	messengers.OrderPostInput
 	Init(args ...string) error
 	Available() bool
+	Name() string
 }
 
 const component = "messenger"

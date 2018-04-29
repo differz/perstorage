@@ -33,7 +33,7 @@ func (u OrderMessageUseCase) OrderMessage(phone string, message string) {
 	customerID, _ := strconv.Atoi(strings.Replace(phone, "+", "", 1))
 
 	customer := core.Customer{ID: customerID}
-	chatID, ok := repo.FindCustomerChatID(customer, "telegram") //TODO: @Inject
+	chatID, ok := repo.FindCustomerChatID(customer, msgr.Name())
 	if !ok {
 		fmt.Printf("no chat id for customer %d", customerID)
 	}
