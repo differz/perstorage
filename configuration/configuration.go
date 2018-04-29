@@ -2,15 +2,13 @@ package configuration
 
 import (
 	"encoding/json"
-	"fmt"
 	"log"
 	"os"
 	"sync"
-
-	"../common"
 )
 
-type config struct {
+// Config application parameters
+type Config struct {
 	ConfigName    string
 	StorageName   string
 	StorageArgs   string
@@ -24,31 +22,32 @@ const (
 )
 
 var (
-	cfg  *config
+	cfg  *Config
 	once sync.Once
 )
 
-func Get() *config {
+// Get configuration from file
+func Get() *Config {
 	once.Do(func() {
-		cfg = &config{}
+		cfg = &Config{}
 		cfg.read()
 	})
 	return cfg
 }
 
-func (conf *config) read() {
+func (conf *Config) read() {
 	file, err := os.Open(cfgFile)
 	if err != nil {
-		msg := fmt.Sprintf("can't read file %s", cfgFile)
-		common.ContextUpMessage(component, msg)
-		log.Fatal(msg)
+		log.Fatalf("can't read file %s", cfgFile)
 	}
 	decoder := json.NewDecoder(file)
 	err = decoder.Decode(conf)
 	if err != nil {
-		msg := fmt.Sprintf("error parsing file %s, %e ", cfgFile, err)
-		common.ContextUpMessage(component, msg)
-		log.Fatal(msg)
+		log.Fatalf("error parsing file %s, %e ", cfgFile, err)
 	}
-	common.ContextUpMessage(component, fmt.Sprint(cfg))
+}
+
+// Name of configuration
+func Name() string {
+	return Get().ConfigName
 }

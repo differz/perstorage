@@ -1,8 +1,10 @@
 package context
 
 import (
+	"fmt"
 	"sync"
 
+	"../../common"
 	"../../configuration"
 	"../../messenger"
 	"../../storage"
@@ -14,6 +16,8 @@ type context struct {
 	messenger messenger.Messenger
 }
 
+const component = "configuration"
+
 var (
 	ctx  *context
 	once sync.Once
@@ -22,6 +26,8 @@ var (
 func getContext() *context {
 	once.Do(func() {
 		cfg := configuration.Get()
+		common.ContextUpMessage(component, fmt.Sprint(cfg))
+
 		ctx = &context{}
 		ctx.name = "main"
 		ctx.storage, _ = storage.Get(cfg.StorageName, cfg.StorageArgs)

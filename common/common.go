@@ -4,6 +4,8 @@ import (
 	"fmt"
 	"strings"
 	"time"
+
+	"../configuration"
 )
 
 const (
@@ -11,17 +13,11 @@ const (
 	componentSize = 14
 )
 
-// CurrentConfiguration returns name of current configuration
-func CurrentConfiguration() string {
-	//	return configuration.Name()
-	return "main"
-}
-
 // ContextUpMessage print message about up status of component
 func ContextUpMessage(component, message string) {
 	t := time.Now()
 	s := t.Format(TimeFormat()) + "\t" +
-		"[" + trimToSize(CurrentConfiguration(), configSize) + "]" +
+		"[" + trimToSize(configuration.Name(), configSize) + "]" +
 		" " + trimToSize(component, componentSize) + " " +
 		":" + message
 	fmt.Println(s)
