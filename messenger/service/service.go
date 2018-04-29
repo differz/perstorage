@@ -6,7 +6,7 @@ import (
 	"../../usecases"
 )
 
-// Service ...
+// Service object
 type Service struct {
 	customerMessenger contracts.CustomerMessengerInput
 	orderMessage      contracts.OrderMessageInput
@@ -14,17 +14,20 @@ type Service struct {
 
 // NewService constructor
 func NewService() Service {
+	st := context.Storage()
+	ms := context.Messenger()
 	return Service{
-		customerMessenger: usecases.NewCustomerMessengerUseCase(context.Storage(), context.Messenger()),
-		orderMessage:      usecases.NewOrderMessageUseCase(),
+		customerMessenger: usecases.NewCustomerMessengerUseCase(st, ms),
+		orderMessage:      usecases.NewOrderMessageUseCase(st, ms),
 	}
 }
 
+// ListenChat listen messenger chat
 func (s Service) ListenChat() {
 	s.customerMessenger.ListenChat()
 }
 
-// OrderMessage ...
+// OrderMessage send message to phone number
 func (s Service) OrderMessage(phone string, message string) {
 	s.orderMessage.OrderMessage(phone, message)
 }

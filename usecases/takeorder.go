@@ -24,7 +24,6 @@ func NewTakeOrderUseCase(repo storage.Storager) TakeOrderUseCase {
 // TakeOrder ...
 func (u TakeOrderUseCase) TakeOrder(request contracts.TakeOrderRequest, output contracts.TakeOrderOutput) {
 	link := request.Link
-	//repo := configuration.GetStorage()
 	order, ok := u.repo.FindOrderByLink(link)
 	if ok {
 		for _, item := range order.Items {

@@ -7,7 +7,7 @@ import (
 	"../../web"
 )
 
-// Controller ...
+// Controller object
 type Controller struct {
 	name string
 }
@@ -22,8 +22,6 @@ func newController() Controller {
 }
 
 func handler(w http.ResponseWriter, r *http.Request) {
-	//	fmt.Fprintf(w, "/upload: Server request, URL %s", r.URL.Path[1:])
-	fmt.Println("method:", r.Method)
 	if r.Method == "GET" {
 		srv := NewService(uri)
 		name, err := srv.downloadFile(w, r)

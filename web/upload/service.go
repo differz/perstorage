@@ -14,7 +14,7 @@ import (
 	"gopkg.in/cheggaaa/pb.v1"
 )
 
-// Service ...
+// Service object
 type Service struct {
 	placeOrder contracts.PlaceOrderInput
 }
@@ -60,7 +60,6 @@ func (s Service) uploadFile(r *http.Request) (string, error) {
 
 	resp := PlaceOrderResponse{phone: req.Phone}
 	s.placeOrder.PlaceOrder(req, resp)
-
 	return resp.downloadLink, nil
 }
 

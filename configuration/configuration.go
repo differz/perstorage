@@ -17,8 +17,8 @@ type Config struct {
 }
 
 const (
-	component = "configuration"
-	cfgFile   = "config.json"
+	Component = "configuration"
+	cfgFile = "config.json"
 )
 
 var (
@@ -35,6 +35,11 @@ func Get() *Config {
 	return cfg
 }
 
+// Name of configuration
+func Name() string {
+	return Get().ConfigName
+}
+
 func (conf *Config) read() {
 	file, err := os.Open(cfgFile)
 	if err != nil {
@@ -45,9 +50,4 @@ func (conf *Config) read() {
 	if err != nil {
 		log.Fatalf("error parsing file %s, %e ", cfgFile, err)
 	}
-}
-
-// Name of configuration
-func Name() string {
-	return Get().ConfigName
 }

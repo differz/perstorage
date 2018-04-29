@@ -2,13 +2,13 @@ package upload
 
 import "../../messenger/service"
 
-// PlaceOrderResponse ...
+// PlaceOrderResponse response data
 type PlaceOrderResponse struct {
 	downloadLink string
 	phone        string
 }
 
-// OnResponse ...
+// OnResponse send order message through messenger via registered phone number
 func (r PlaceOrderResponse) OnResponse(phone, orderLink string) {
 	r.downloadLink = orderLink
 	r.phone = phone

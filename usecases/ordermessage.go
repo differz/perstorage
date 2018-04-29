@@ -1,45 +1,44 @@
 package usecases
 
 import (
-	"fmt"
-	"strconv"
-	"strings"
-
-	"../configuration/context"
 	"../core"
+	"../messenger"
+	"../storage"
+	"log"
 )
 
 // OrderMessageUseCase ...
 type OrderMessageUseCase struct {
+	repo storage.Storager
+	msgr messenger.Messenger
 	//
 	subject     string
 	description string
 }
 
 // NewOrderMessageUseCase ...
-func NewOrderMessageUseCase() OrderMessageUseCase {
+func NewOrderMessageUseCase(repo storage.Storager, msgr messenger.Messenger) OrderMessageUseCase {
 	return OrderMessageUseCase{
-		description: "new",
+		repo: repo,
+		msgr: msgr,
+		description: "order message",
 	}
 }
 
 // OrderMessage ...
 func (u OrderMessageUseCase) OrderMessage(phone string, message string) {
-	// TODO: @Inject
-	repo := context.Storage()
-	msgr := context.Messenger()
-
-	// TODO: find customer by phone
-	customerID, _ := strconv.Atoi(strings.Replace(phone, "+", "", 1))
-
-	customer := core.Customer{ID: customerID}
-	chatID, ok := repo.FindCustomerChatID(customer, msgr.Name())
-	if !ok {
-		fmt.Printf("no chat id for customer %d", customerID)
+	customerID, err := core.GetCustomerIDByPhone(phone)
+	if err != nil {
+		log.Printf("can't get customer id by phone %s", phone)
 	}
 
-	msgr.ShowOrder(chatID, message)
+	customer := core.Customer{ID: customerID}
+	chatID, ok := u.repo.FindCustomerChatID(customer, u.msgr.Name())
+	if !ok {
+		log.Printf("no chat id for customer %d", customerID)
+	}
 
+	u.msgr.ShowOrder(chatID, message)
 }
 
 // TODO: request

@@ -7,7 +7,7 @@ import (
 	"../../web"
 )
 
-// Controller ...
+// Controller object
 type Controller struct {
 	name string
 }

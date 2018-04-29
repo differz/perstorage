@@ -38,11 +38,14 @@ func (s *Storage) Init(args ...string) {
 	common.ContextUpMessage(component, "init file storage")
 	dir := args[0]
 	err := os.MkdirAll(dir, os.ModePerm)
-	file := dir + "perstorage.db"
+	if err != nil {
+		log.Fatalf("can't create directory %s %e", dir, err)
+	}
 
+	file := dir + "perstorage.db"
 	s.connection, err = sql.Open("sqlite3", file)
 	if err != nil {
-		log.Fatal(err)
+		log.Fatalf("can't open sqlite storage %e", err)
 	}
 
 	s.migrate()

@@ -3,8 +3,7 @@ package mongostorage
 // The MongoDB driver for Go
 // https://github.com/globalsign/mgo
 import (
-	"fmt"
-
+	"../../common"
 	"../../core"
 	"../../storage"
 )
@@ -13,6 +12,8 @@ import (
 type Storage struct {
 	name string
 }
+
+const component = "mongo"
 
 // New create storage instance
 func New() Storage {
@@ -23,7 +24,7 @@ func New() Storage {
 
 // Init db and create connection. Do migration if needed.
 func (s Storage) Init(args ...string) {
-	fmt.Println("Init<>")
+	common.ContextUpMessage(component, "init mongo storage")
 	s.migrate()
 }
 
@@ -86,5 +87,5 @@ func (s Storage) String() string {
 }
 
 func init() {
-	storage.Register("mongo", New())
+	storage.Register(component, New())
 }

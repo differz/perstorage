@@ -7,12 +7,12 @@ import (
 	"strconv"
 )
 
-// TakeOrderResponse ...
+// TakeOrderResponse response data
 type TakeOrderResponse struct {
 	writer http.ResponseWriter
 }
 
-// OnResponse ...
+// OnResponse write file and fill header to writer handler
 func (r TakeOrderResponse) OnResponse(sourcename, filename string, size int) {
 	file, err := os.Open(sourcename)
 	if err != nil {

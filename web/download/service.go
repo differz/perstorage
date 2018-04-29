@@ -9,7 +9,7 @@ import (
 	"../../usecases"
 )
 
-// Service ...
+// Service object
 type Service struct {
 	takeOrder contracts.TakeOrderInput
 	uri       string
@@ -28,6 +28,5 @@ func (s Service) downloadFile(w http.ResponseWriter, r *http.Request) (string, e
 	req := contracts.TakeOrderRequest{Link: link}
 	resp := TakeOrderResponse{writer: w}
 	s.takeOrder.TakeOrder(req, resp)
-
 	return "", nil
 }

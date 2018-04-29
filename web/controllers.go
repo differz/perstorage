@@ -10,7 +10,6 @@ import (
 // Controller for web resouces
 type Controller interface {
 	//Handler(w http.ResponseWriter, r *http.Request)
-	//	String() string
 }
 
 const component = "controllers"
@@ -43,7 +42,7 @@ func String() string {
 	return fmt.Sprint(controllers)
 }
 
-// Print ...
+// Print view of controllers factory map to console
 func Print() {
 	common.ContextUpMessage(component, String())
 }

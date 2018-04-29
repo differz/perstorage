@@ -51,6 +51,7 @@ func (m Messenge) Available() bool {
 // ListenChat send all new messages to output interface
 func (m Messenge) ListenChat(output messengers.ListenChatOutput) {
 	if !m.Available() {
+		log.Println("bot not available")
 		return
 	}
 	bot := m.bot
@@ -59,11 +60,12 @@ func (m Messenge) ListenChat(output messengers.ListenChatOutput) {
 
 	updates, err := bot.GetUpdatesChan(tgu)
 	if err != nil {
-		log.Panic(err)
+		log.Panic("can't get updates chanel ", err)
 	}
-	// TODO: if chatId is registered
+
 	for update := range updates {
-		chatID := update.Message.Chat.ID
+		chatID := update.Message.Chat.ID // TODO: if chatId is registered
+		// is contact?
 		if update.Message.Contact != nil {
 			phone := update.Message.Contact.PhoneNumber
 			output.OnResponse(phone, m.name, int(chatID))
@@ -89,8 +91,8 @@ func (m Messenge) ShowOrder(chatID int, message string) error {
 	// TODO: add server
 	downloadLink := "http://localhost:8081/download/" + message
 	msg := tgbotapi.NewMessage(int64(chatID), downloadLink)
-	m.bot.Send(msg)
-	return nil
+	_, err := m.bot.Send(msg)
+	return err
 }
 
 func (m Messenge) String() string {

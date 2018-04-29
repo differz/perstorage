@@ -16,39 +16,40 @@ type context struct {
 	messenger messenger.Messenger
 }
 
-const component = "configuration"
+const component = "context"
 
 var (
 	ctx  *context
 	once sync.Once
 )
 
-func getContext() *context {
+func get() *context {
 	once.Do(func() {
 		cfg := configuration.Get()
-		common.ContextUpMessage(component, fmt.Sprint(cfg))
+		common.ContextUpMessage(configuration.Component, fmt.Sprint(cfg))
 
 		ctx = &context{}
-		ctx.name = "main"
+		ctx.name = configuration.Name()
 		ctx.storage, _ = storage.Get(cfg.StorageName, cfg.StorageArgs)
 		ctx.messenger, _ = messenger.Get(cfg.MessengerName, cfg.MessengerKey)
+		common.ContextUpMessage(component, fmt.Sprint(ctx))
 	})
 	return ctx
 }
 
 // Name of current configuration
 func Name() string {
-	return getContext().name
+	return get().name
 }
 
 // Messenger takes messenger @Bean
 func Messenger() messenger.Messenger {
-	return getContext().messenger
+	return get().messenger
 }
 
 // Storage take storage @Bean
 func Storage() storage.Storager {
-	return getContext().storage
+	return get().storage
 }
 
 // Close all connections before exit
