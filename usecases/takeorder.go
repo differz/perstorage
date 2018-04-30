@@ -5,7 +5,7 @@ import (
 	"../storage"
 )
 
-// TakeOrderUseCase ...
+// TakeOrderUseCase object
 type TakeOrderUseCase struct {
 	repo storage.Storager
 	//
@@ -13,7 +13,7 @@ type TakeOrderUseCase struct {
 	description string
 }
 
-// NewTakeOrderUseCase ...
+// NewTakeOrderUseCase constructor
 func NewTakeOrderUseCase(repo storage.Storager) TakeOrderUseCase {
 	return TakeOrderUseCase{
 		repo:        repo,
@@ -21,10 +21,9 @@ func NewTakeOrderUseCase(repo storage.Storager) TakeOrderUseCase {
 	}
 }
 
-// TakeOrder ...
+// TakeOrder takes order by link and send to response all ordered items
 func (u TakeOrderUseCase) TakeOrder(request contracts.TakeOrderRequest, output contracts.TakeOrderOutput) {
-	link := request.Link
-	order, ok := u.repo.FindOrderByLink(link)
+	order, ok := u.repo.FindOrderByLink(request.Link)
 	if ok {
 		for _, item := range order.Items {
 			output.OnResponse(item.SourceName, item.Filename, item.Size)

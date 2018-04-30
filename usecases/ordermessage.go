@@ -1,13 +1,14 @@
 package usecases
 
 import (
+	"log"
+
 	"../core"
 	"../messenger"
 	"../storage"
-	"log"
 )
 
-// OrderMessageUseCase ...
+// OrderMessageUseCase object
 type OrderMessageUseCase struct {
 	repo storage.Storager
 	msgr messenger.Messenger
@@ -16,16 +17,16 @@ type OrderMessageUseCase struct {
 	description string
 }
 
-// NewOrderMessageUseCase ...
+// NewOrderMessageUseCase constructor
 func NewOrderMessageUseCase(repo storage.Storager, msgr messenger.Messenger) OrderMessageUseCase {
 	return OrderMessageUseCase{
-		repo: repo,
-		msgr: msgr,
+		repo:        repo,
+		msgr:        msgr,
 		description: "order message",
 	}
 }
 
-// OrderMessage ...
+// OrderMessage show message to customers messenger by phone number
 func (u OrderMessageUseCase) OrderMessage(phone string, message string) {
 	customerID, err := core.GetCustomerIDByPhone(phone)
 	if err != nil {

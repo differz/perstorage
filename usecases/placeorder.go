@@ -1,14 +1,14 @@
 package usecases
 
 import (
-	"fmt"
+	"log"
 
 	"../contracts/usecases"
 	"../core"
 	"../storage"
 )
 
-// PlaceOrderUseCase ...
+// PlaceOrderUseCase object
 type PlaceOrderUseCase struct {
 	repo storage.Storager
 	//
@@ -16,7 +16,7 @@ type PlaceOrderUseCase struct {
 	description string
 }
 
-// NewPlaceOrderUseCase ...
+// NewPlaceOrderUseCase constructor
 func NewPlaceOrderUseCase(repo storage.Storager) PlaceOrderUseCase {
 	return PlaceOrderUseCase{
 		repo:        repo,
@@ -24,11 +24,12 @@ func NewPlaceOrderUseCase(repo storage.Storager) PlaceOrderUseCase {
 	}
 }
 
-// PlaceOrder ...
+// PlaceOrder stores all order info and call order link delivery to customer
 func (u PlaceOrderUseCase) PlaceOrder(request contracts.PlaceOrderRequest, output contracts.PlaceOrderOutput) {
 	customerID, err := core.GetCustomerIDByPhone(request.Phone)
 	if err != nil {
-		// TODO error
+		log.Printf("can't get customer id by phone %s %e", request.Phone, err)
+		return
 	}
 
 	customer, ok := u.repo.FindCustomerByID(customerID)
@@ -38,11 +39,10 @@ func (u PlaceOrderUseCase) PlaceOrder(request contracts.PlaceOrderRequest, outpu
 		u.repo.StoreCustomer(customer)
 	}
 
-	fmt.Println(customer)
-
 	item := core.Item{Filename: request.Filename, SourceName: request.GetSourceName()}
 	item.ID, err = u.repo.StoreItem(item)
 	if err != nil {
+		log.Printf("can't store item %s %e", item.Filename, err)
 		return
 	}
 
@@ -51,6 +51,7 @@ func (u PlaceOrderUseCase) PlaceOrder(request contracts.PlaceOrderRequest, outpu
 
 	order.ID, err = u.repo.StoreOrder(order)
 	if err != nil {
+		log.Printf("can't store order for customer %s %e", order.Customer.Name, err)
 		return
 	}
 

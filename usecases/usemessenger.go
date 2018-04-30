@@ -1,14 +1,14 @@
 package usecases
 
 import (
-	"strconv"
-	"strings"
+	"log"
 
+	"../core"
 	"../messenger"
 	"../storage"
 )
 
-// CustomerMessengerUseCase ...
+// CustomerMessengerUseCase object
 type CustomerMessengerUseCase struct {
 	repo storage.Storager
 	msgr messenger.Messenger
@@ -17,16 +17,16 @@ type CustomerMessengerUseCase struct {
 	description string
 }
 
-// NewCustomerMessengerUseCase ...
+// NewCustomerMessengerUseCase constructor
 func NewCustomerMessengerUseCase(repo storage.Storager, msgr messenger.Messenger) CustomerMessengerUseCase {
 	return CustomerMessengerUseCase{
 		repo:        repo,
 		msgr:        msgr,
-		description: "new",
+		description: "new customer messenger",
 	}
 }
 
-// ListenChat ...
+// ListenChat listen messengers chat
 func (u CustomerMessengerUseCase) ListenChat() {
 	output := CustomerMessengerResponse{
 		repo: u.repo,
@@ -34,12 +34,12 @@ func (u CustomerMessengerUseCase) ListenChat() {
 	go u.msgr.ListenChat(output)
 }
 
-// CustomerMessengerResponse ...
+// CustomerMessengerResponse object to response
 type CustomerMessengerResponse struct {
 	repo storage.Storager
 }
 
-// OnResponse ...
+// OnResponse register new chatID to customer messenger
 func (r CustomerMessengerResponse) OnResponse(phone string, messengerName string, chatID int) {
 	if validatePhone(phone) {
 		go r.registerMessenger(phone, messengerName, chatID)
@@ -47,9 +47,10 @@ func (r CustomerMessengerResponse) OnResponse(phone string, messengerName string
 }
 
 func (r CustomerMessengerResponse) registerMessenger(phone string, messengerName string, chatID int) {
-	customerID, err := strconv.Atoi(strings.Replace(phone, "+", "", 1))
+	customerID, err := core.GetCustomerIDByPhone(phone)
 	if err != nil {
-		// TODO error
+		log.Printf("can't get customer id by phone %s %e", phone, err)
+		return
 	}
 
 	customer, ok := r.repo.FindCustomerByID(customerID)

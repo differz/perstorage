@@ -1,6 +1,6 @@
 package contracts
 
-// CustomerMessengerInput ...
+// CustomerMessengerInput use messenger contract
 type CustomerMessengerInput interface {
 	ListenChat()
 }

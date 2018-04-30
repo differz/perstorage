@@ -1,5 +1,10 @@
 package contracts
 
+// OrderMessageInput delivery order link to messenger contract
+type OrderMessageInput interface {
+	OrderMessage(phone string, orderLink string)
+}
+
 /*
 type OrderMessageRequest struct {
 	Phone   string
@@ -11,10 +16,6 @@ type OrderMessageInput interface {
 }
 
 type OrderMessageOutput interface {
-	OnResponse(phone string, orderLink string)
+	OnResponse()
 }
 */
-
-type OrderMessageInput interface {
-	OrderMessage(phone string, orderLink string)
-}
