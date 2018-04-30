@@ -123,8 +123,6 @@ func (s Storage) StoreItem(item core.Item) (int, error) {
 		}
 		item.ID = int(id)
 	}
-
-	fmt.Println("StoreItem<>")
 	return item.ID, err
 }
 
@@ -179,8 +177,6 @@ func (s Storage) StoreOrder(order core.Order) (int, error) {
 		}
 	}
 	err = tx.Commit()
-
-	fmt.Println("StoreOrder<>")
 	return order.ID, err
 }
 
@@ -258,7 +254,6 @@ func (s Storage) FindOrderByID(id int) (core.Order, bool) {
 		ok = true
 		order.Add(item)
 	}
-
 	return order, ok
 }
 
@@ -286,7 +281,6 @@ func (s Storage) FindOrderByLink(link string) (core.Order, bool) {
 	} else {
 		return order, false
 	}
-
 	return s.FindOrderByID(order.ID)
 }
 
@@ -311,8 +305,6 @@ func (s Storage) StoreCustomer(customer core.Customer) (int, error) {
 		}
 		customer.ID = int(id)
 	}
-
-	fmt.Println("StoreCustomer<>")
 	return customer.ID, err
 }
 
