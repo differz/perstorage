@@ -12,8 +12,8 @@ import (
 
 	// used modules
 	_ "./messenger/telegram"
-	_ "./storage/filestorage"
-	_ "./storage/mongostorage"
+	_ "./storage/file"
+	_ "./storage/mongo"
 	_ "./web/download"
 	_ "./web/root"
 	_ "./web/upload"
@@ -26,9 +26,6 @@ func main() {
 	messenger.Print()
 	storage.Print()
 	web.Print()
-
-	//con, _ := web.Get("root")
-	//fmt.Println(con)
 
 	srv := messengers.NewService()
 	srv.ListenChat()

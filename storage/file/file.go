@@ -1,4 +1,4 @@
-package filestorage
+package file
 
 import (
 	"database/sql"
@@ -20,6 +20,7 @@ import (
 // Storage object for file db
 type Storage struct {
 	name       string
+	dir        string
 	connection *sql.DB
 }
 
@@ -33,22 +34,21 @@ func New() *Storage {
 }
 
 // Init db and create connection. Do migration if needed.
-// By default dir = "./local/filestorage/"
 func (s *Storage) Init(args ...string) {
-	common.ContextUpMessage(component, "init file storage")
-	dir := args[0]
-	err := os.MkdirAll(dir, os.ModePerm)
+	s.dir = args[0]
+	common.ContextUpMessage(component, "init file storage on "+s.dir)
+	err := os.MkdirAll(s.dir, os.ModePerm)
 	if err != nil {
-		log.Fatalf("can't create directory %s %e", dir, err)
+		log.Fatalf("can't create directory %s %e", s.dir, err)
 	}
 
-	file := dir + "perstorage.db"
+	file := s.dir + "perstorage.db"
 	s.connection, err = sql.Open("sqlite3", file)
 	if err != nil {
 		log.Fatalf("can't open sqlite storage %e", err)
 	}
 
-	s.migrate("file://./storage/filestorage/migrations")
+	s.migrate("file://./storage/file/migrations")
 }
 
 func (s Storage) migrate(loc string) {
@@ -85,7 +85,7 @@ func (s Storage) StoreItem(item core.Item) (int, error) {
 		fmt.Printf("Something went wrong: %s", err)
 	}
 
-	dir := "./local/filestorage/" + u5.String() + "/"
+	dir := s.dir + u5.String() + "/"
 	path := dir + item.Filename
 
 	err = os.MkdirAll(dir, os.ModePerm)

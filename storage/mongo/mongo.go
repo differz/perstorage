@@ -1,4 +1,4 @@
-package mongostorage
+package mongo
 
 // The MongoDB driver for Go
 // https://github.com/globalsign/mgo
