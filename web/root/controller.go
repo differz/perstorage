@@ -9,19 +9,18 @@ import (
 	"../../web"
 )
 
-// Controller for root
-type Controller struct {
+type controller struct {
 	name string
 }
 
 var uri = "/"
 
-func (c Controller) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+func (c controller) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprintf(w, Body)
 }
 
-func newController() Controller {
-	c := Controller{
+func newController() controller {
+	c := controller{
 		name: uri,
 	}
 	logger := log.New(os.Stdout, "server: ", log.Lshortfile)
