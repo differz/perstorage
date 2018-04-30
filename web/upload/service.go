@@ -14,20 +14,18 @@ import (
 	"gopkg.in/cheggaaa/pb.v1"
 )
 
-// Service object
-type Service struct {
+type service struct {
 	placeOrder contracts.PlaceOrderInput
 }
 
-// NewService constructor
-func NewService() Service {
-	return Service{
+func newService() service {
+	return service{
 		placeOrder: usecases.NewPlaceOrderUseCase(context.Storage()),
 	}
 }
 
 // TODO: try with MultipartReader
-func (s Service) uploadOrder(r *http.Request) (string, error) {
+func (s service) uploadOrder(r *http.Request) (string, error) {
 	r.ParseMultipartForm(32 << 20)
 	inMD5 := r.FormValue("MD5")
 	file, handler, err := r.FormFile("uploadfile")

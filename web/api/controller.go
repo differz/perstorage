@@ -7,16 +7,15 @@ import (
 	"../../web"
 )
 
-// Controller ...
-type Controller struct {
+type controller struct {
 	name string
 }
 
 var uri = "/api"
 
-func new() Controller {
+func newController() controller {
 	http.HandleFunc(uri, handler)
-	return Controller{
+	return controller{
 		name: uri,
 	}
 }
@@ -26,5 +25,5 @@ func handler(w http.ResponseWriter, r *http.Request) {
 }
 
 func init() {
-	web.Register(uri, new())
+	web.Register(uri, newController())
 }

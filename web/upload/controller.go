@@ -1,29 +1,28 @@
 package upload
 
 import (
+	"log"
 	"net/http"
 
 	"../../web"
-	"log"
 )
 
-// Controller object
-type Controller struct {
+type controller struct {
 	name string
 }
 
 var uri = "/upload"
 
-func newController() Controller {
+func newController() controller {
 	http.HandleFunc(uri, handler)
-	return Controller{
+	return controller{
 		name: uri,
 	}
 }
 
 func handler(w http.ResponseWriter, r *http.Request) {
 	if r.Method == "POST" {
-		srv := NewService()
+		srv := newService()
 		name, err := srv.uploadOrder(r)
 		if err == nil {
 			log.Printf("uploaded order %s", name)

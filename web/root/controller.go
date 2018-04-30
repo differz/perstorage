@@ -16,12 +16,11 @@ type Controller struct {
 
 var uri = "/"
 
-// fmt.Fprintf(w, "default: Server request, URL %s", r.URL.Path[1:])
 func (c Controller) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprintf(w, Body)
 }
 
-func new() Controller {
+func newController() Controller {
 	c := Controller{
 		name: uri,
 	}
@@ -31,5 +30,5 @@ func new() Controller {
 }
 
 func init() {
-	web.Register("root", new())
+	web.Register("root", newController())
 }

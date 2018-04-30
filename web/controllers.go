@@ -7,9 +7,8 @@ import (
 	"../common"
 )
 
-// Controller for web resouces
+// Controller for web resources
 type Controller interface {
-	//Handler(w http.ResponseWriter, r *http.Request)
 }
 
 const component = "controllers"
