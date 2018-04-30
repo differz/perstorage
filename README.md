@@ -25,5 +25,9 @@ go get gopkg.in/telegram-bot-api.v4
 * [TDM-GCC compiler for Windows](http://tdm-gcc.tdragon.net/download)
 
 ### Useful links ###
+* [Go Name Conventions](https://talks.golang.org/2014/names.slide)
+* [Writing Web Applications](https://golang.org/doc/articles/wiki/) 
+* [SOLID Principles](https://android.jlelse.eu/solid-principles-the-definitive-guide-75e30a284dea)
+* [Clean Code](https://www.amazon.com/Clean-Code-Handbook-Software-Craftsmanship/dp/0132350882)
 * [The Clean Architecture](https://8thlight.com/blog/uncle-bob/2012/08/13/the-clean-architecture.html)
 * [Learn Markdown](https://bitbucket.org/tutorials/markdowndemo)

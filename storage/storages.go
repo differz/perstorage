@@ -16,7 +16,6 @@ type Storager interface {
 	repositories.Messenger
 	Init(args ...string)
 	Close()
-	//	String() string
 }
 
 const component = "storages"

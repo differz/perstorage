@@ -48,21 +48,24 @@ func (s *Storage) Init(args ...string) {
 		log.Fatalf("can't open sqlite storage %e", err)
 	}
 
-	s.migrate()
+	s.migrate("file://./storage/filestorage/migrations")
 }
 
-func (s Storage) migrate() {
+func (s Storage) migrate(loc string) {
 	driver, err := sqlite3.WithInstance(s.connection, &sqlite3.Config{})
 	if err != nil {
-		log.Fatal("can't init sqlite driver", err)
+		log.Fatalf("can't init sqlite driver %e", err)
 	}
-	m, err := migrate.NewWithDatabaseInstance(
-		"file://./storage/filestorage/migrations",
-		"sqlite3", driver)
+	m, err := migrate.NewWithDatabaseInstance(loc, "sqlite3", driver)
 	if err != nil {
-		log.Fatal("can't get sqlite migration instance", err)
+		log.Fatalf("can't get sqlite migration instance %e", err)
 	}
-	m.Up()
+	err = m.Up()
+	if err == migrate.ErrNoChange {
+		common.ContextUpMessage("migrate", "database is already up-to-date, no update required")
+	} else if err != nil {
+		log.Fatalf("can't migrate database %e", err)
+	}
 }
 
 // Close defer db.Close()
