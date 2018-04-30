@@ -2,7 +2,7 @@
   "ConfigName"    : "main",
   "ServerAddress" : "http://127.0.0.1:8081",
   "StorageName"   : "file",
-  "StorageArgs"   : "./local/filestorage/",
+  "StorageArgs"   : "./local/storage/",
   "MessengerName" : "telegram",
   "MessengerKey"  : "529441026:AAFSIDbMBsdSaVNcQFIh4upIqL_KbU_oUGY22"
 }
