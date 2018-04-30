@@ -23,10 +23,10 @@ func NewService(uri string) Service {
 	}
 }
 
-func (s Service) downloadFile(w http.ResponseWriter, r *http.Request) (string, error) {
+func (s Service) downloadOrder(w http.ResponseWriter, r *http.Request) (string, error) {
 	link := strings.Replace(r.RequestURI, s.uri, "", 1)
 	req := contracts.TakeOrderRequest{Link: link}
 	resp := TakeOrderResponse{writer: w}
 	s.takeOrder.TakeOrder(req, resp)
-	return "", nil
+	return link, nil
 }

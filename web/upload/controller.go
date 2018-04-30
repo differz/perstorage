@@ -1,10 +1,10 @@
 package upload
 
 import (
-	"fmt"
 	"net/http"
 
 	"../../web"
+	"log"
 )
 
 // Controller object
@@ -24,9 +24,9 @@ func newController() Controller {
 func handler(w http.ResponseWriter, r *http.Request) {
 	if r.Method == "POST" {
 		srv := NewService()
-		name, err := srv.uploadFile(r)
+		name, err := srv.uploadOrder(r)
 		if err == nil {
-			fmt.Println(name)
+			log.Printf("uploaded order %s", name)
 		}
 	}
 	http.Redirect(w, r, "/", 301)

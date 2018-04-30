@@ -88,8 +88,7 @@ func (m Messenge) ShowOrder(chatID int, message string) error {
 	if !m.Available() {
 		return fmt.Errorf("bot not available")
 	}
-	// TODO: add server
-	downloadLink := "http://localhost:8081/download/" + message
+	downloadLink := common.DownloadLink(message)
 	msg := tgbotapi.NewMessage(int64(chatID), downloadLink)
 	_, err := m.bot.Send(msg)
 	return err

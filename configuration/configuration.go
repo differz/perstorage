@@ -10,6 +10,7 @@ import (
 // Config application parameters
 type Config struct {
 	ConfigName    string
+	ServerAddress string
 	StorageName   string
 	StorageArgs   string
 	MessengerName string
@@ -18,7 +19,7 @@ type Config struct {
 
 const (
 	Component = "configuration"
-	cfgFile = "config.json"
+	cfgFile   = "config.json"
 )
 
 var (
@@ -38,6 +39,11 @@ func Get() *Config {
 // Name of configuration
 func Name() string {
 	return Get().ConfigName
+}
+
+// ServerAddress current server ip address with port
+func ServerAddress() string {
+	return Get().ServerAddress
 }
 
 func (conf *Config) read() {

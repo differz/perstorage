@@ -32,7 +32,7 @@ func Register(name string, controller Controller) {
 func Get(name string) (Controller, error) {
 	controller, ok := controllers[name]
 	if !ok {
-		return nil, fmt.Errorf("cnknown controller type: %s", name)
+		return nil, fmt.Errorf("unknown controller type: %s", name)
 	}
 	return controller, nil
 }

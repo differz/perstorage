@@ -21,7 +21,7 @@ go get gopkg.in/telegram-bot-api.v4
 ```
 ### Environment ###
 * [Visual Studio Code 1.22.2](https://code.visualstudio.com/)
-* [GoLand 2018.1](https://www.jetbrains.com/go/)
+* [JetBrains GoLand 2018.1](https://www.jetbrains.com/go/)
 * [TDM-GCC compiler for Windows](http://tdm-gcc.tdragon.net/download)
 
 ### Useful links ###

@@ -35,3 +35,8 @@ func trimToSize(value string, size int) string {
 	}
 	return value + strings.Repeat(" ", size-len(value))
 }
+
+// DownloadLink return download path with server name:port
+func DownloadLink(link string) string {
+	return configuration.ServerAddress() + "/download/" + link
+}

@@ -1,7 +1,7 @@
 package download
 
 import (
-	"fmt"
+	"log"
 	"net/http"
 
 	"../../web"
@@ -24,9 +24,9 @@ func newController() Controller {
 func handler(w http.ResponseWriter, r *http.Request) {
 	if r.Method == "GET" {
 		srv := NewService(uri)
-		name, err := srv.downloadFile(w, r)
+		name, err := srv.downloadOrder(w, r)
 		if err == nil {
-			fmt.Println(name)
+			log.Printf("downloaded order %s", name)
 		}
 	}
 	http.Redirect(w, r, "/", 301)

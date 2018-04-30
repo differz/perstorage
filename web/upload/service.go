@@ -26,7 +26,8 @@ func NewService() Service {
 	}
 }
 
-func (s Service) uploadFile(r *http.Request) (string, error) {
+// TODO: try with MultipartReader
+func (s Service) uploadOrder(r *http.Request) (string, error) {
 	r.ParseMultipartForm(32 << 20)
 	inMD5 := r.FormValue("MD5")
 	file, handler, err := r.FormFile("uploadfile")
