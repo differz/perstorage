@@ -1,7 +1,8 @@
  Personal Storage
 ============================
-> Web application 
-
+[PRESENTATION](https://docs.google.com/presentation/d/1OV8a93ohqEK4N1NXVCPrDJZP9a4PAQCaRUtBNR34a88/edit?usp=sharing)
+> Web application
+ 
 ### Use cases ###
 * Place order files
 * Take order files
@@ -10,6 +11,12 @@
 
 ### Used components ###
 * Golang build version 1.10.1
+* Sqlite 3
+* MongoDB
+* Migrate
+* UUID
+* Progress bar
+* Telegram API
 
 Before your start:
 ```
