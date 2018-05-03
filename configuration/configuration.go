@@ -19,7 +19,7 @@ type Config struct {
 
 const (
 	Component = "configuration"
-	cfgFile   = "config.json"
+	cfgFile   = "perstorage.json"
 )
 
 var (
