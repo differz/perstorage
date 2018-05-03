@@ -2,7 +2,6 @@ package file
 
 import (
 	"database/sql"
-	"fmt"
 	"log"
 	"os"
 
@@ -77,12 +76,12 @@ func (s Storage) Close() {
 func (s Storage) StoreItem(item core.Item) (int, error) {
 	ns, err := uuid.FromString("6ba7b810-9dad-11d1-80b4-00c04fd430c8") // TODO: namespace
 	if err != nil {
-		fmt.Printf("Something went wrong: %s", err)
+		log.Printf("can't generate namespace %e", err)
 	}
 	key := "salt:" + item.Filename
 	u5 := uuid.NewV5(ns, key)
 	if err != nil {
-		fmt.Printf("Something went wrong: %s", err)
+		log.Printf("can't generate UUID %e", err)
 	}
 
 	dir := s.dir + u5.String() + "/"
@@ -331,7 +330,6 @@ func (s Storage) FindCustomerByID(id int) (core.Customer, bool) {
 			log.Fatal(err)
 		}
 		ok = true
-		fmt.Println(customer.ID, customer.Phone)
 	}
 	return customer, ok
 }
