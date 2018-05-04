@@ -12,11 +12,16 @@ import (
 
 // Messenge telegram object
 type Messenge struct {
-	name string
-	bot  *tgbotapi.BotAPI
+	name   string
+	server string
+	bot    *tgbotapi.BotAPI
 }
 
-const component = "telegram"
+const (
+	component = "telegram"
+	register  = "send you phone to register"
+	upload    = "<b>to upload files</b>" + "\n" + "<i>use Send as File!</i>" + "\n" + "<em>for > 1,5G follow link:</em>"
+)
 
 // New create instance. Init method has pointer receiver
 func New() *Messenge {
@@ -28,6 +33,7 @@ func New() *Messenge {
 // Init connect to API by token
 func (m *Messenge) Init(args ...string) error {
 	common.ContextUpMessage(component, "init telegram token")
+	m.server = args[1]
 	token := args[0]
 	bot, err := tgbotapi.NewBotAPI(token)
 	if err != nil {
@@ -49,7 +55,7 @@ func (m Messenge) Available() bool {
 }
 
 // ListenChat send all new messages to output interface
-func (m Messenge) ListenChat(output messengers.ListenChatOutput) {
+func (m Messenge) ListenChat(request messengers.ListenChatRequest, output messengers.ListenChatOutput) {
 	if !m.Available() {
 		log.Println("bot not available")
 		return
@@ -64,22 +70,42 @@ func (m Messenge) ListenChat(output messengers.ListenChatOutput) {
 	}
 
 	for update := range updates {
-		chatID := update.Message.Chat.ID // TODO: if chatId is registered
+		chatID := update.Message.Chat.ID
+		_, registered := request.Repo.IsRegisteredChatID(int(chatID), m.name)
+
 		// is contact?
-		if update.Message.Contact != nil {
-			phone := update.Message.Contact.PhoneNumber
-			output.OnResponse(phone, m.name, int(chatID))
-			continue
+		con := update.Message.Contact
+		if con != nil {
+			request.Phone = con.PhoneNumber
+			request.Messenger = m.name
+			request.ChatID = int(chatID)
+			output.OnResponse(request)
+		}
+		// is document?
+		doc := update.Message.Document
+		if doc != nil {
+			request.FileID = doc.FileID
+			request.FileName = doc.FileName
+			request.FileSize = doc.FileSize
+			output.OnResponse(request)
 		}
 
-		msg := tgbotapi.NewMessage(chatID, "send you phone to register")
-		var keyboard = tgbotapi.NewReplyKeyboard(
-			tgbotapi.NewKeyboardButtonRow(
-				tgbotapi.NewKeyboardButtonContact("\xF0\x9F\x93\x9E Send phone"),
-			),
-		)
-		msg.ReplyMarkup = keyboard
-		bot.Send(msg)
+		if registered {
+			msg := tgbotapi.NewMessage(chatID, upload)
+			msg.ParseMode = "HTML"
+			bot.Send(msg)
+			msg = tgbotapi.NewMessage(chatID, m.server)
+			bot.Send(msg)
+		} else {
+			msg := tgbotapi.NewMessage(chatID, register)
+			var keyboard = tgbotapi.NewReplyKeyboard(
+				tgbotapi.NewKeyboardButtonRow(
+					tgbotapi.NewKeyboardButtonContact("\xF0\x9F\x93\x9E Send phone"),
+				),
+			)
+			msg.ReplyMarkup = keyboard
+			bot.Send(msg)
+		}
 	}
 }
 
@@ -92,6 +118,16 @@ func (m Messenge) ShowOrder(chatID int, message string) error {
 	msg := tgbotapi.NewMessage(int64(chatID), downloadLink)
 	_, err := m.bot.Send(msg)
 	return err
+}
+
+// DownloadFile from chat
+func (m Messenge) DownloadFile(fileID string) {
+	url, err := m.bot.GetFileDirectURL(fileID)
+	if err != nil {
+		log.Printf("can't download url for file from chat %e", err)
+	}
+	// TODO
+	_ = url
 }
 
 func (m Messenge) String() string {

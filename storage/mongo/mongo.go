@@ -82,6 +82,11 @@ func (s Storage) FindCustomerChatID(customer core.Customer, messengerName string
 	return 0, false
 }
 
+// IsRegisteredChatID get customer's id if chat already registered
+func (s Storage) IsRegisteredChatID(chatID int, messengerName string) (int, bool) {
+	return 0, false
+}
+
 func (s Storage) String() string {
 	return s.name
 }

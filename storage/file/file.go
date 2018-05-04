@@ -377,6 +377,33 @@ func (s Storage) FindCustomerChatID(customer core.Customer, messengerName string
 	return chatID, ok
 }
 
+// IsRegisteredChatID get customer's id if chat already registered
+func (s Storage) IsRegisteredChatID(chatID int, messengerName string) (int, bool) {
+	sql := "SELECT customer_id FROM customer_messengers WHERE chat_id = ? AND messenger = ?"
+	stmt, err := s.connection.Prepare(sql)
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer stmt.Close()
+
+	rows, err := stmt.Query(chatID, messengerName)
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer rows.Close()
+
+	customerID := 0
+	ok := false
+	if rows.Next() {
+		err = rows.Scan(&customerID)
+		if err != nil {
+			log.Fatal(err)
+		}
+		ok = true
+	}
+	return customerID, ok
+}
+
 func (s Storage) String() string {
 	return s.name
 }

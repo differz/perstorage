@@ -31,7 +31,7 @@ func get() *context {
 		ctx = &context{}
 		ctx.name = configuration.Name()
 		ctx.storage, _ = storage.Get(cfg.StorageName, cfg.StorageArgs)
-		ctx.messenger, _ = messenger.Get(cfg.MessengerName, cfg.MessengerKey)
+		ctx.messenger, _ = messenger.Get(cfg.MessengerName, cfg.MessengerKey, configuration.ServerAddress())
 		common.ContextUpMessage(component, fmt.Sprint(ctx))
 	})
 	return ctx

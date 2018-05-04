@@ -14,11 +14,11 @@ type Service struct {
 
 // NewService constructor
 func NewService() Service {
-	st := context.Storage()
-	ms := context.Messenger()
+	repo := context.Storage()
+	msgr := context.Messenger()
 	return Service{
-		customerMessenger: usecases.NewCustomerMessengerUseCase(st, ms),
-		orderMessage:      usecases.NewOrderMessageUseCase(st, ms),
+		customerMessenger: usecases.NewCustomerMessengerUseCase(repo, msgr),
+		orderMessage:      usecases.NewOrderMessageUseCase(repo, msgr),
 	}
 }
 
