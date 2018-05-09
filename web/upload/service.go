@@ -47,7 +47,7 @@ func (s service) uploadOrder(r *http.Request) (string, error) {
 		return "", err
 	}
 
-	temp, err := os.OpenFile(req.GetSourceName(), os.O_RDWR|os.O_CREATE, 0666)
+	temp, err := os.Create(req.GetSourceName())
 	if err != nil {
 		log.Printf("can't create file %e", err)
 		return "", err

@@ -10,7 +10,7 @@ type ListenChatRequest struct {
 	Phone     string
 	Messenger string
 	ChatID    int
-	FileID    string
+	FileURL   string
 	FileName  string
 	FileSize  int
 }

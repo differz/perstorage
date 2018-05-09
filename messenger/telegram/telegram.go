@@ -84,10 +84,18 @@ func (m Messenge) ListenChat(request messengers.ListenChatRequest, output messen
 		// is document?
 		doc := update.Message.Document
 		if doc != nil {
-			request.FileID = doc.FileID
-			request.FileName = doc.FileName
-			request.FileSize = doc.FileSize
-			output.OnResponse(request)
+			url, err := m.bot.GetFileDirectURL(doc.FileID)
+			if err != nil {
+				log.Printf("can't get url for file from chat %e", err)
+
+			} else {
+				request.Messenger = m.name
+				request.ChatID = int(chatID)
+				request.FileURL = url
+				request.FileName = doc.FileName
+				request.FileSize = doc.FileSize
+				output.OnResponse(request)
+			}
 		}
 
 		if registered {
@@ -118,16 +126,6 @@ func (m Messenge) ShowOrder(chatID int, message string) error {
 	msg := tgbotapi.NewMessage(int64(chatID), downloadLink)
 	_, err := m.bot.Send(msg)
 	return err
-}
-
-// DownloadFile from chat
-func (m Messenge) DownloadFile(fileID string) {
-	url, err := m.bot.GetFileDirectURL(fileID)
-	if err != nil {
-		log.Printf("can't download url for file from chat %e", err)
-	}
-	// TODO
-	_ = url
 }
 
 func (m Messenge) String() string {
