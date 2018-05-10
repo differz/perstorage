@@ -1,7 +1,8 @@
  Personal Storage
 ============================
-[PRESENTATION](https://docs.google.com/presentation/d/1OV8a93ohqEK4N1NXVCPrDJZP9a4PAQCaRUtBNR34a88/edit?usp=sharing)
 > Web application
+
+[OVERVIEW](https://docs.google.com/presentation/d/1OV8a93ohqEK4N1NXVCPrDJZP9a4PAQCaRUtBNR34a88/edit?usp=sharing)
  
 ### Use cases ###
 * Place order files
@@ -26,6 +27,11 @@ go get github.com/satori/go.uuid
 go get gopkg.in/cheggaaa/pb.v1
 go get gopkg.in/telegram-bot-api.v4
 ```
+```
+To use Telegram messenger you must register new bot with BotFather.
+Add this token to configuration and /start conversation.
+```
+
 ### Environment ###
 * [Visual Studio Code 1.22.2](https://code.visualstudio.com/)
 * [JetBrains GoLand 2018.1](https://www.jetbrains.com/go/)

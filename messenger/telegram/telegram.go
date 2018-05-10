@@ -71,8 +71,6 @@ func (m Messenge) ListenChat(request messengers.ListenChatRequest, output messen
 
 	for update := range updates {
 		chatID := update.Message.Chat.ID
-		_, registered := request.Repo.IsRegisteredChatID(int(chatID), m.name)
-
 		// is contact?
 		con := update.Message.Contact
 		if con != nil {
@@ -98,6 +96,7 @@ func (m Messenge) ListenChat(request messengers.ListenChatRequest, output messen
 			}
 		}
 
+		_, registered := request.Repo.IsRegisteredChatID(int(chatID), m.name)
 		if registered {
 			msg := tgbotapi.NewMessage(chatID, upload)
 			msg.ParseMode = "HTML"
