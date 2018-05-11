@@ -5,13 +5,12 @@ import (
 	"log"
 	"os"
 
+	"../../common"
+	"../../storage"
 	"github.com/mattes/migrate"
 	"github.com/mattes/migrate/database/sqlite3"
 	// sqlite
 	_ "github.com/mattes/migrate/source/file"
-
-	"../../common"
-	"../../storage"
 )
 
 // Storage object for file db
