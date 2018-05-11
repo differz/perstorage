@@ -38,14 +38,14 @@ func (m *Messenge) Init(args ...string) error {
 	return err
 }
 
-// Name telegram
-func (m Messenge) Name() string {
-	return m.name
-}
-
 // Available true if telegram api is on
 func (m Messenge) Available() bool {
 	return m.bot != nil
+}
+
+// Name telegram
+func (m Messenge) Name() string {
+	return m.name
 }
 
 func (m Messenge) String() string {
