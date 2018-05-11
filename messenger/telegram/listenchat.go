@@ -1,58 +1,16 @@
 package telegram
 
 import (
-	"fmt"
 	"log"
 
-	"../../common"
 	"../../contracts/messengers"
-	"../../messenger"
 	"gopkg.in/telegram-bot-api.v4"
 )
 
-// Messenge telegram object
-type Messenge struct {
-	name   string
-	server string
-	bot    *tgbotapi.BotAPI
-}
-
 const (
-	component = "telegram"
-	register  = "send you phone to register"
-	upload    = "<b>to upload files</b>" + "\n" + "<i>use Send as File!</i>" + "\n" + "<em>for > 1,5G follow link:</em>"
+	register = "send you phone to register"
+	upload   = "<b>to upload files</b>" + "\n" + "<i>use Send as File!</i>" + "\n" + "<em>for > 1,5G follow link:</em>"
 )
-
-// New create instance. Init method has pointer receiver
-func New() *Messenge {
-	return &Messenge{
-		name: "telegram",
-	}
-}
-
-// Init connect to API by token
-func (m *Messenge) Init(args ...string) error {
-	common.ContextUpMessage(component, "init telegram token")
-	m.server = args[1]
-	token := args[0]
-	bot, err := tgbotapi.NewBotAPI(token)
-	if err != nil {
-		log.Println("can't connect with token ", token, " ", err)
-	} else {
-		m.bot = bot
-	}
-	return err
-}
-
-// Name telegram
-func (m Messenge) Name() string {
-	return m.name
-}
-
-// Available true if telegram api is on
-func (m Messenge) Available() bool {
-	return m.bot != nil
-}
 
 // ListenChat send all new messages to output interface
 func (m Messenge) ListenChat(request messengers.ListenChatRequest, output messengers.ListenChatOutput) {
@@ -114,23 +72,4 @@ func (m Messenge) ListenChat(request messengers.ListenChatRequest, output messen
 			bot.Send(msg)
 		}
 	}
-}
-
-// ShowOrder place order details in chat message
-func (m Messenge) ShowOrder(chatID int, message string) error {
-	if !m.Available() {
-		return fmt.Errorf("bot not available")
-	}
-	downloadLink := common.DownloadLink(message)
-	msg := tgbotapi.NewMessage(int64(chatID), downloadLink)
-	_, err := m.bot.Send(msg)
-	return err
-}
-
-func (m Messenge) String() string {
-	return m.name
-}
-
-func init() {
-	messenger.Register(component, New())
 }
