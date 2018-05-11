@@ -11,16 +11,12 @@ import (
 // PlaceOrderUseCase object
 type PlaceOrderUseCase struct {
 	repo storage.Storager
-	//
-	subject     string
-	description string
 }
 
 // NewPlaceOrderUseCase constructor
 func NewPlaceOrderUseCase(repo storage.Storager) PlaceOrderUseCase {
 	return PlaceOrderUseCase{
-		repo:        repo,
-		description: "new",
+		repo: repo,
 	}
 }
 

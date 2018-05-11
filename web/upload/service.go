@@ -1,13 +1,13 @@
 package upload
 
 import (
-	"crypto/md5"
 	"io"
 	"log"
 	"mime/multipart"
 	"net/http"
 	"os"
 
+	"../../common"
 	"../../configuration/context"
 	"../../contracts/usecases"
 	"../../usecases"
@@ -54,7 +54,7 @@ func (s service) uploadOrder(r *http.Request) (string, error) {
 	}
 
 	copyFile(file, temp, int(handler.Size))
-	req.MD5 = computeMD5(temp)
+	req.MD5 = common.ComputeMD5(temp)
 	temp.Close()
 
 	resp := PlaceOrderResponse{phone: req.Phone}
@@ -68,13 +68,4 @@ func copyFile(in multipart.File, out *os.File, dataSize int) {
 	reader := bar.NewProxyReader(in)
 	io.Copy(out, reader)
 	bar.Finish()
-}
-
-func computeMD5(file *os.File) []byte {
-	var result []byte
-	hash := md5.New()
-	if _, err := io.Copy(hash, file); err != nil {
-		return result
-	}
-	return hash.Sum(result)
 }

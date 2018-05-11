@@ -40,3 +40,7 @@ func trimToSize(value string, size int) string {
 func DownloadLink(link string) string {
 	return configuration.ServerAddress() + "/download/" + link
 }
+
+func ValidatePhone(phone string) bool {
+	return phone != ""
+}

@@ -1,6 +1,7 @@
 package main
 
 import (
+	"log"
 	"net/http"
 
 	"./common"
@@ -30,5 +31,9 @@ func main() {
 	srv := messengers.NewService()
 	srv.ListenChat()
 
-	http.ListenAndServe(":8081", nil)
+	common.ContextUpMessage("application", "running...")
+	err := http.ListenAndServe(":8081", nil)
+	if err != nil {
+		log.Printf("can't start http server %e", err)
+	}
 }

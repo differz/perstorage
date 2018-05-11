@@ -3,7 +3,8 @@ package messengers
 import (
 	"../../configuration/context"
 	"../../contracts/usecases"
-	"../../usecases"
+	uc "../../usecases"
+	ucm "../../usecases/messenger"
 )
 
 // Service object
@@ -17,8 +18,8 @@ func NewService() Service {
 	repo := context.Storage()
 	msgr := context.Messenger()
 	return Service{
-		customerMessenger: usecases.NewCustomerMessengerUseCase(repo, msgr),
-		orderMessage:      usecases.NewOrderMessageUseCase(repo, msgr),
+		customerMessenger: ucm.NewCustomerMessengerUseCase(repo, msgr),
+		orderMessage:      uc.NewOrderMessageUseCase(repo, msgr),
 	}
 }
 
