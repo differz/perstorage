@@ -8,6 +8,9 @@ import (
 
 // StoreOrder save bucket to storage
 func (s Storage) StoreOrder(order core.Order) (int, error) {
+	mutex.Lock()
+	defer mutex.Unlock()
+
 	tx, err := s.connection.Begin()
 	if err != nil {
 		log.Fatal(err)
@@ -57,6 +60,9 @@ func (s Storage) StoreOrder(order core.Order) (int, error) {
 
 // FindOrderByID get bucket from storage
 func (s Storage) FindOrderByID(id int) (core.Order, bool) {
+	mutex.RLock()
+	defer mutex.RUnlock()
+
 	sql := "SELECT id, customer_id FROM orders WHERE id = ?"
 	stmt, err := s.connection.Prepare(sql)
 	if err != nil {
@@ -134,6 +140,9 @@ func (s Storage) FindOrderByID(id int) (core.Order, bool) {
 
 // FindOrderByLink get bucket from storage by link
 func (s Storage) FindOrderByLink(link string) (core.Order, bool) {
+	mutex.RLock()
+	defer mutex.RUnlock()
+
 	sql := "SELECT order_id FROM order_links WHERE link = ?"
 	stmt, err := s.connection.Prepare(sql)
 	if err != nil {

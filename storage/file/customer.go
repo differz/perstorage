@@ -8,6 +8,9 @@ import (
 
 // StoreCustomer save client to storage
 func (s Storage) StoreCustomer(customer core.Customer) (int, error) {
+	mutex.Lock()
+	defer mutex.Unlock()
+
 	sql := "INSERT INTO customers(id, name, phone) VALUES(?, ?, ?)"
 	stmt, err := s.connection.Prepare(sql)
 	if err != nil {
@@ -32,6 +35,9 @@ func (s Storage) StoreCustomer(customer core.Customer) (int, error) {
 
 // FindCustomerByID get client from storage
 func (s Storage) FindCustomerByID(id int) (core.Customer, bool) {
+	mutex.RLock()
+	defer mutex.RUnlock()
+
 	sql := "SELECT id, name, phone FROM customers WHERE id = ?"
 	stmt, err := s.connection.Prepare(sql)
 	if err != nil {

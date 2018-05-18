@@ -38,6 +38,9 @@ func (s Storage) StoreItem(item core.Item) (int, error) {
 		size = fi.Size()
 	}
 
+	mutex.Lock()
+	defer mutex.Unlock()
+
 	sql := "INSERT INTO items(name, filename, path, size, available) VALUES(?, ?, ?, ?, ?)"
 	stmt, err := s.connection.Prepare(sql)
 	if err != nil {

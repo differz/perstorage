@@ -4,6 +4,7 @@ import (
 	"database/sql"
 	"log"
 	"os"
+	"sync"
 
 	"../../common"
 	"../../storage"
@@ -22,6 +23,8 @@ type Storage struct {
 
 const component = "file"
 
+var mutex sync.RWMutex
+
 // New create storage instance
 func New() *Storage {
 	return &Storage{
@@ -37,6 +40,9 @@ func (s *Storage) Init(args ...string) {
 	if err != nil {
 		log.Fatalf("can't create directory %s %e", s.dir, err)
 	}
+
+	mutex.Lock()
+	defer mutex.Unlock()
 
 	file := s.dir + "perstorage.db"
 	s.connection, err = sql.Open("sqlite3", file)
