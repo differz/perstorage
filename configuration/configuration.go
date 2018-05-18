@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"log"
 	"os"
+	"strings"
 	"sync"
 )
 
@@ -44,6 +45,17 @@ func Name() string {
 // ServerAddress current server ip address with port
 func ServerAddress() string {
 	return Get().ServerAddress
+}
+
+// ServerPort current server port
+func ServerPort() string {
+	port := ":80"
+	addr := ServerAddress()
+	idx := strings.LastIndex(addr, ":")
+	if idx > 10 {
+		port = addr[idx:]
+	}
+	return port
 }
 
 func (conf *Config) read() {
