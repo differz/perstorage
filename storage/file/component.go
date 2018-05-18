@@ -44,12 +44,12 @@ func (s *Storage) Init(args ...string) {
 	mutex.Lock()
 	defer mutex.Unlock()
 
-	file := s.dir + "perstorage.db"
+	file := s.dir + "perstorage.db" + "?_busy_timeout=5000"
 	s.connection, err = sql.Open("sqlite3", file)
 	if err != nil {
 		log.Fatalf("can't open sqlite storage %e", err)
 	}
-
+	s.connection.SetMaxOpenConns(1)
 	s.migrate("file://./storage/file/migrations")
 }
 
