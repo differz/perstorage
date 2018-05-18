@@ -57,9 +57,11 @@ func (s Storage) migrate(loc string) {
 		log.Fatalf("can't get sqlite migration instance %e", err)
 	}
 	err = m.Up()
-	if err == migrate.ErrNoChange {
+	if err == nil {
+		common.ContextUpMessage("migrate", "database migrated successfully")
+	} else if err == migrate.ErrNoChange {
 		common.ContextUpMessage("migrate", "database is already up-to-date, no update required")
-	} else if err != nil {
+	} else {
 		log.Fatalf("can't migrate database %e", err)
 	}
 }
