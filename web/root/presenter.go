@@ -7,7 +7,7 @@ const Body = `
        <title>Upload file</title>
 </head>
 <body>
-<form enctype="multipart/form-data" action="http://127.0.0.1:8081/upload" method="post">
+<form enctype="multipart/form-data" action="hostname/upload" method="post">
     <input type="file" name="uploadfile"/>
     <input type="text" name="phone"/>
     <input type="checkbox" name="private" value="private"/>

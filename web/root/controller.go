@@ -5,7 +5,9 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"strings"
 
+	"../../configuration"
 	"../../web"
 )
 
@@ -16,7 +18,8 @@ type controller struct {
 var uri = "/"
 
 func (c controller) ServeHTTP(w http.ResponseWriter, r *http.Request) {
-	fmt.Fprintf(w, Body)
+	body := strings.Replace(Body, "hostname", configuration.ServerAddress(), 1)
+	fmt.Fprintf(w, body)
 }
 
 func newController() controller {
