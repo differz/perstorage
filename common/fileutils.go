@@ -1,9 +1,9 @@
 package common
 
 import (
-	"os"
 	"crypto/md5"
 	"io"
+	"os"
 )
 
 func ComputeMD5(file *os.File) []byte {

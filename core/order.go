@@ -25,8 +25,8 @@ func (o *Order) Add(item Item) error {
 
 // Link create order hash based on orderID & customerID
 func (o *Order) Link() string {
-	key := "order#" + string(o.ID) + 
-	       "customer:" + string(o.Customer.ID)
+	key := "order#" + string(o.ID) +
+		"customer:" + string(o.Customer.ID)
 	hasher := sha256.New()
 	hasher.Write([]byte(key))
 	hash := hasher.Sum(nil)
