@@ -41,6 +41,7 @@ func DownloadLink(link string) string {
 	return configuration.ServerAddress() + "/download/" + link
 }
 
+// ValidatePhone check phone mask
 func ValidatePhone(phone string) bool {
 	return phone != ""
 }
