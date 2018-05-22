@@ -6,6 +6,7 @@ import (
 	"os"
 )
 
+// ComputeMD5 hash sum for file
 func ComputeMD5(file *os.File) []byte {
 	var result []byte
 	hash := md5.New()
