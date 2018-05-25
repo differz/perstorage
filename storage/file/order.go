@@ -2,6 +2,7 @@ package file
 
 import (
 	"log"
+	"time"
 
 	"../../core"
 )
@@ -16,14 +17,17 @@ func (s Storage) StoreOrder(order core.Order) (int, error) {
 		log.Fatal(err)
 	}
 
-	sql := "INSERT INTO orders(customer_id) VALUES(?)"
+	sql := "INSERT INTO orders(customer_id, description, order_date) VALUES(?, ?, ?)"
 	stmt, err := tx.Prepare(sql)
 	if err != nil {
 		log.Fatal(err)
 	}
 	defer stmt.Close()
 
-	res, err := stmt.Exec(order.Customer.ID)
+	now := time.Now().UTC()
+	now.Format("2006-01-02T15:04:05.999999999")
+
+	res, err := stmt.Exec(order.Customer.ID, order.Description, now)
 	if err != nil {
 		log.Fatal(err)
 	}

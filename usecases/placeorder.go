@@ -47,7 +47,7 @@ func (u PlaceOrderUseCase) PlaceOrder(request contracts.PlaceOrderRequest, outpu
 		return
 	}
 
-	order := core.Order{Customer: customer}
+	order := core.Order{Customer: customer, Description: request.Description}
 	order.Add(item)
 
 	order.ID, err = u.repo.StoreOrder(order)

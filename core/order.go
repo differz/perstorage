@@ -7,9 +7,10 @@ import (
 
 // Order contains several files which places at ones
 type Order struct {
-	ID       int
-	Customer Customer
-	Items    []Item
+	ID          int
+	Customer    Customer
+	Items       []Item
+	Description string
 }
 
 // IsNew returns true if it is new order

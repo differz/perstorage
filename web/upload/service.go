@@ -39,6 +39,7 @@ func (s service) uploadOrder(r *http.Request) (string, error) {
 	req.Filename = handler.Filename
 	req.Dir = "./local/incoming/" + inMD5 + "/"
 	req.Phone = r.FormValue("phone")
+	req.Description = r.FormValue("description")
 	req.Private = r.FormValue("private") == "private"
 
 	err = os.MkdirAll(req.Dir, os.ModePerm)

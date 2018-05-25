@@ -2,6 +2,7 @@ package telegram
 
 import (
 	"log"
+	"time"
 
 	"../../contracts/messengers"
 	"gopkg.in/telegram-bot-api.v4"
@@ -29,9 +30,11 @@ func (m Messenge) ListenChat(request messengers.ListenChatRequest, output messen
 
 	for update := range updates {
 		chatID := update.Message.Chat.ID
+		mustRegistered := false
 		// is contact?
 		con := update.Message.Contact
 		if con != nil {
+			mustRegistered = true
 			request.Phone = con.PhoneNumber
 			request.Messenger = m.name
 			request.ChatID = int(chatID)
@@ -54,7 +57,7 @@ func (m Messenge) ListenChat(request messengers.ListenChatRequest, output messen
 			}
 		}
 
-		_, registered := request.Repo.IsRegisteredChatID(int(chatID), m.name)
+		registered := m.isRegisteredWait(request, mustRegistered, int(chatID), 10)
 		if registered {
 			msg := tgbotapi.NewMessage(chatID, upload)
 			msg.ParseMode = "HTML"
@@ -72,4 +75,14 @@ func (m Messenge) ListenChat(request messengers.ListenChatRequest, output messen
 			bot.Send(msg)
 		}
 	}
+}
+
+func (m Messenge) isRegisteredWait(request messengers.ListenChatRequest, must bool, chatID, seconds int) bool {
+	_, registered := request.Repo.IsRegisteredChatID(chatID, m.name)
+	if !registered && must && seconds > 0 {
+		d, _ := time.ParseDuration("1s")
+		time.Sleep(d)
+		registered = m.isRegisteredWait(request, must, chatID, seconds-1)
+	}
+	return registered
 }
