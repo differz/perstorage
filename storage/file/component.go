@@ -4,9 +4,11 @@ import (
 	"database/sql"
 	"log"
 	"os"
+	"path/filepath"
 	"sync"
 
 	"../../common"
+	"../../configuration"
 	"../../storage"
 	"github.com/mattes/migrate"
 	"github.com/mattes/migrate/database/sqlite3"
@@ -50,7 +52,8 @@ func (s *Storage) Init(args ...string) {
 		log.Fatalf("can't open sqlite storage %e", err)
 	}
 	s.connection.SetMaxOpenConns(1)
-	s.migrate("file://./storage/file/migrations")
+	path := "file://" + filepath.ToSlash(configuration.ExecutableDir()) + "/storage/file/migrations"
+	s.migrate(path)
 }
 
 func (s Storage) migrate(loc string) {

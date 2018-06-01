@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"log"
 	"os"
+	"path/filepath"
 	"strings"
 	"sync"
 )
@@ -58,8 +59,25 @@ func ServerPort() string {
 	return port
 }
 
+// ExecutableDir current dir for perstorage binary
+func ExecutableDir() string {
+	ex, err := os.Executable()
+	if err != nil {
+		panic(err)
+	}
+	return filepath.Dir(ex)
+}
+
+func filePath() string {
+	var sb strings.Builder
+	sb.WriteString(ExecutableDir())
+	sb.WriteRune(os.PathSeparator)
+	sb.WriteString(cfgFile)
+	return sb.String()
+}
+
 func (conf *Config) read() {
-	file, err := os.Open(cfgFile)
+	file, err := os.Open(filePath())
 	if err != nil {
 		log.Fatalf("can't read file %s", cfgFile)
 	}
