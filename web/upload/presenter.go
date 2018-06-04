@@ -6,12 +6,12 @@ import "../../messenger/service"
 type PlaceOrderResponse struct {
 	downloadLink string
 	phone        string
+	ms           messengers.Service
 }
 
 // OnResponse send order message through messenger via registered phone number
 func (r PlaceOrderResponse) OnResponse(phone, orderLink string) {
 	r.downloadLink = orderLink
 	r.phone = phone
-	ms := messengers.NewService()
-	ms.OrderMessage(phone, orderLink)
+	r.ms.OrderMessage(phone, orderLink)
 }

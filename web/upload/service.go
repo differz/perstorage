@@ -10,17 +10,20 @@ import (
 	"../../common"
 	"../../configuration/context"
 	"../../contracts/usecases"
+	"../../messenger/service"
 	"../../usecases"
 	"gopkg.in/cheggaaa/pb.v1"
 )
 
 type service struct {
 	placeOrder contracts.PlaceOrderInput
+	ms         messengers.Service
 }
 
 func newService() service {
 	return service{
 		placeOrder: usecases.NewPlaceOrderUseCase(context.Storage()),
+		ms:         messengers.NewService(),
 	}
 }
 
@@ -58,7 +61,7 @@ func (s service) uploadOrder(r *http.Request) (string, error) {
 	req.MD5 = common.ComputeMD5(temp)
 	temp.Close()
 
-	resp := PlaceOrderResponse{phone: req.Phone}
+	resp := PlaceOrderResponse{phone: req.Phone, ms: s.ms}
 	s.placeOrder.PlaceOrder(req, resp)
 	return resp.downloadLink, nil
 }
