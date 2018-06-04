@@ -26,7 +26,7 @@ var (
 func get() *context {
 	once.Do(func() {
 		cfg := configuration.Get()
-		common.ContextUpMessage(configuration.Component, fmt.Sprint(cfg))
+		common.ContextUpMessage(configuration.Component(), fmt.Sprint(cfg))
 
 		ctx = &context{}
 		ctx.name = configuration.Name()

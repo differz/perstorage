@@ -20,7 +20,8 @@ type Config struct {
 }
 
 const (
-	Component = "configuration"
+	version   = "1.0.1.1"
+	component = "configuration"
 	cfgFile   = "perstorage.json"
 )
 
@@ -28,6 +29,16 @@ var (
 	cfg  *Config
 	once sync.Once
 )
+
+// Version of application
+func Version() string {
+	return version
+}
+
+// Component name
+func Component() string {
+	return component
+}
 
 // Get configuration from file
 func Get() *Config {
