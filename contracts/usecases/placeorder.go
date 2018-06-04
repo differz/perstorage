@@ -1,5 +1,6 @@
 package contracts
 
+// PlaceOrderRequest data structure
 type PlaceOrderRequest struct {
 	Filename   string
 	Dir        string
@@ -12,10 +13,12 @@ type PlaceOrderRequest struct {
 	Description string
 }
 
+// PlaceOrderInput upload contract
 type PlaceOrderInput interface {
 	PlaceOrder(request PlaceOrderRequest, output PlaceOrderOutput)
 }
 
+// PlaceOrderOutput upload response contract
 type PlaceOrderOutput interface {
 	OnResponse(phone, orderLink string)
 }
