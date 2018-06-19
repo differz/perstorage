@@ -67,7 +67,22 @@ func (s Storage) FindOrderByID(id int) (core.Order, bool) {
 	mutex.RLock()
 	defer mutex.RUnlock()
 
-	sql := "SELECT id, customer_id FROM orders WHERE id = ?"
+	order, customerID, ok := s.getOrderHeadByID(id)
+	if !ok {
+		return order, ok
+	}
+
+	order, ok = s.fillOrderItems(order)
+	if !ok {
+		return order, ok
+	}
+
+	order.Customer, ok = s.findCustomerByID(customerID)
+	return order, ok
+}
+
+func (s Storage) getOrderHeadByID(id int) (core.Order, int, bool) {
+	sql := "SELECT id, description, customer_id FROM orders WHERE id = ?"
 	stmt, err := s.connection.Prepare(sql)
 	if err != nil {
 		log.Fatal(err)
@@ -81,36 +96,21 @@ func (s Storage) FindOrderByID(id int) (core.Order, bool) {
 	defer rows.Close()
 
 	order := core.Order{}
-	customer := core.Customer{}
+	customerID := 0
+	ok := false
 	if rows.Next() {
-		err = rows.Scan(&order.ID, &customer.ID)
+		err = rows.Scan(&order.ID, &order.Description, &customerID)
 		if err != nil {
 			log.Fatal(err)
+		} else {
+			ok = true
 		}
-	} else {
-		return order, false
 	}
+	return order, customerID, ok
+}
 
-	sql = "SELECT id, name, phone FROM customers WHERE id = ?"
-	stmt, err = s.connection.Prepare(sql)
-	if err != nil {
-		log.Fatal(err)
-	}
-	rows, err = stmt.Query(customer.ID)
-	if err != nil {
-		log.Fatal(err)
-	}
-	if rows.Next() {
-		err = rows.Scan(&customer.ID, &customer.Name, &customer.Phone)
-		if err != nil {
-			log.Fatal(err)
-		}
-		order.Customer = customer
-	} else {
-		return order, false
-	}
-
-	sql = "SELECT" +
+func (s Storage) fillOrderItems(order core.Order) (core.Order, bool) {
+	sql := "SELECT" +
 		"  i.id," +
 		"  i.name," +
 		"  i.filename," +
@@ -121,29 +121,70 @@ func (s Storage) FindOrderByID(id int) (core.Order, bool) {
 		" LEFT JOIN items AS i" +
 		"	ON oi.item_id = i.id" +
 		" WHERE order_id = ?"
-	stmt, err = s.connection.Prepare(sql)
+	stmt, err := s.connection.Prepare(sql)
 	if err != nil {
 		log.Fatal(err)
 	}
-	rows, err = stmt.Query(order.ID)
+	defer stmt.Close()
+
+	rows, err := stmt.Query(order.ID)
 	if err != nil {
 		log.Fatal(err)
 	}
+	defer rows.Close()
+
 	ok := false
 	for rows.Next() {
 		item := core.Item{}
 		err = rows.Scan(&item.ID, &item.Name, &item.Filename, &item.SourceName, &item.Size, &item.Available)
 		if err != nil {
 			log.Fatal(err)
+		} else {
+			ok = true
+			order.Add(item)
 		}
-		ok = true
-		order.Add(item)
 	}
 	return order, ok
 }
 
+func (s Storage) findCustomerByID(id int) (core.Customer, bool) {
+	sql := "SELECT id, name, phone FROM customers WHERE id = ?"
+	stmt, err := s.connection.Prepare(sql)
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer stmt.Close()
+
+	rows, err := stmt.Query(id)
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer rows.Close()
+
+	customer := core.Customer{}
+	ok := false
+	if rows.Next() {
+		err = rows.Scan(&customer.ID, &customer.Name, &customer.Phone)
+		if err != nil {
+			log.Fatal(err)
+		} else {
+			ok = true
+		}
+	}
+	return customer, ok
+}
+
 // FindOrderByLink get bucket from storage by link
 func (s Storage) FindOrderByLink(link string) (core.Order, bool) {
+	orderID, ok := s.findOrderIDByLink(link)
+	order := core.Order{}
+	if !ok {
+		return order, false
+	}
+	return s.FindOrderByID(orderID)
+}
+
+func (s Storage) findOrderIDByLink(link string) (int, bool) {
 	mutex.RLock()
 	defer mutex.RUnlock()
 
@@ -167,7 +208,7 @@ func (s Storage) FindOrderByLink(link string) (core.Order, bool) {
 			log.Fatal(err)
 		}
 	} else {
-		return order, false
+		return 0, false
 	}
-	return s.FindOrderByID(order.ID)
+	return order.ID, true
 }
