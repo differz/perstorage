@@ -17,8 +17,8 @@ type OrderMessageUseCase struct {
 // NewOrderMessageUseCase constructor
 func NewOrderMessageUseCase(repo storage.Storager, msgr messenger.Messenger) OrderMessageUseCase {
 	return OrderMessageUseCase{
-		repo:        repo,
-		msgr:        msgr,
+		repo: repo,
+		msgr: msgr,
 	}
 }
 
