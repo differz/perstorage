@@ -2,14 +2,12 @@ package contracts
 
 // PlaceOrderRequest data structure
 type PlaceOrderRequest struct {
-	Filename   string
-	Dir        string
-	Phone      string
-	Private    bool
-	MD5        []byte
-	CustomerID int
-	//
-	Subject     string
+	Filename    string
+	Dir         string
+	Phone       string
+	Private     bool
+	MD5         []byte
+	CustomerID  int
 	Description string
 }
 
@@ -20,7 +18,7 @@ type PlaceOrderInput interface {
 
 // PlaceOrderOutput upload response contract
 type PlaceOrderOutput interface {
-	OnResponse(phone, orderLink string)
+	OnResponse(phone, orderLink, description string)
 }
 
 // GetSourceName TODO rename filepath?

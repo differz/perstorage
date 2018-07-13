@@ -6,13 +6,14 @@ import (
 
 // ListenChatRequest parameters
 type ListenChatRequest struct {
-	Repo      storage.Storager
-	Phone     string
-	Messenger string
-	ChatID    int
-	FileURL   string
-	FileName  string
-	FileSize  int
+	Repo        storage.Storager
+	Phone       string
+	Messenger   string
+	ChatID      int
+	FileURL     string
+	FileName    string
+	FileSize    int
+	Description string
 }
 
 // ListenChatInput listen chat input contract

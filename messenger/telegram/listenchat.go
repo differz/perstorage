@@ -53,6 +53,7 @@ func (m Messenge) ListenChat(request messengers.ListenChatRequest, output messen
 				request.FileURL = url
 				request.FileName = doc.FileName
 				request.FileSize = doc.FileSize
+				request.Description = update.Message.Caption
 				output.OnResponse(request)
 			}
 		}

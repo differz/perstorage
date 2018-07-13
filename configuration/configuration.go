@@ -20,7 +20,7 @@ type Config struct {
 }
 
 const (
-	version   = "1.0.1.1"
+	version   = "1.0.2.1"
 	component = "configuration"
 	cfgFile   = "perstorage.json"
 )

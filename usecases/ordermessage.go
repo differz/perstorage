@@ -12,9 +12,6 @@ import (
 type OrderMessageUseCase struct {
 	repo storage.Storager
 	msgr messenger.Messenger
-	//
-	subject     string
-	description string
 }
 
 // NewOrderMessageUseCase constructor
@@ -22,12 +19,11 @@ func NewOrderMessageUseCase(repo storage.Storager, msgr messenger.Messenger) Ord
 	return OrderMessageUseCase{
 		repo:        repo,
 		msgr:        msgr,
-		description: "order message",
 	}
 }
 
 // OrderMessage show message to customers messenger by phone number
-func (u OrderMessageUseCase) OrderMessage(phone string, message string) {
+func (u OrderMessageUseCase) OrderMessage(phone string, message, description string) {
 	customerID, err := core.GetCustomerIDByPhone(phone)
 	if err != nil {
 		log.Printf("can't get customer id by phone %s", phone)
@@ -39,7 +35,7 @@ func (u OrderMessageUseCase) OrderMessage(phone string, message string) {
 		log.Printf("no chat id for customer %d", customerID)
 	}
 
-	u.msgr.ShowOrder(chatID, message)
+	u.msgr.ShowOrder(chatID, message, description)
 }
 
 // TODO: request

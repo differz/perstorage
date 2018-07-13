@@ -4,14 +4,10 @@ import "../../messenger/service"
 
 // PlaceOrderResponse response data
 type PlaceOrderResponse struct {
-	downloadLink string
-	phone        string
-	ms           messengers.Service
+	ms messengers.Service
 }
 
 // OnResponse send order message through messenger via registered phone number
-func (r PlaceOrderResponse) OnResponse(phone, orderLink string) {
-	r.downloadLink = orderLink
-	r.phone = phone
-	r.ms.OrderMessage(phone, orderLink)
+func (r PlaceOrderResponse) OnResponse(phone, orderLink, description string) {
+	r.ms.OrderMessage(phone, orderLink, description)
 }

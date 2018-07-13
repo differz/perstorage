@@ -29,8 +29,8 @@ func (s Service) ListenChat() {
 }
 
 // OrderMessage send message to phone number
-func (s Service) OrderMessage(phone string, message string) {
-	s.orderMessage.OrderMessage(phone, message)
+func (s Service) OrderMessage(phone string, message, description string) {
+	s.orderMessage.OrderMessage(phone, message, description)
 }
 
 /*

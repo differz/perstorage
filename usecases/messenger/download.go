@@ -13,7 +13,7 @@ import (
 )
 
 // Download file from chat
-func (r CustomerMessengerResponse) downloadFile(url, filename string, size int, msgr string, chatID int) {
+func (r CustomerMessengerResponse) downloadFile(url, filename string, size int, msgr string, chatID int, description string) {
 	customerID, ok := r.repo.IsRegisteredChatID(chatID, msgr)
 	if !ok {
 		log.Printf("can't get customer by chatID %d", chatID)
@@ -30,6 +30,7 @@ func (r CustomerMessengerResponse) downloadFile(url, filename string, size int, 
 	req.Filename = filename
 	req.Dir = "./local/incoming/" + inMD5 + "/"
 	req.CustomerID = customerID
+	req.Description = description
 	req.Private = true
 
 	err := os.MkdirAll(req.Dir, os.ModePerm)
@@ -60,21 +61,23 @@ func (r CustomerMessengerResponse) downloadFile(url, filename string, size int, 
 	req.MD5 = common.ComputeMD5(temp)
 	temp.Close()
 
-	resp := PlaceOrderResponse{phone: req.Phone, orderMessage: r.orderMessage}
+	resp := PlaceOrderResponse{phone: req.Phone, orderMessage: r.orderMessage, description: description}
 	r.placeOrder.PlaceOrder(req, resp)
 }
 
 // PlaceOrderResponse response data
 type PlaceOrderResponse struct {
 	downloadLink string
+	description  string
 	phone        string
 	orderMessage contracts.OrderMessageInput
 }
 
 // OnResponse send order message through messenger via registered phone number
-func (r PlaceOrderResponse) OnResponse(phone, orderLink string) {
+func (r PlaceOrderResponse) OnResponse(phone, orderLink, description string) {
 	r.downloadLink = orderLink
+	r.description = description ///+?
 	r.phone = phone
 
-	r.orderMessage.OrderMessage(phone, orderLink)
+	r.orderMessage.OrderMessage(phone, orderLink, description)
 }

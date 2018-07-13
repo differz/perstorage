@@ -2,7 +2,7 @@ package contracts
 
 // OrderMessageInput delivery order link to messenger contract
 type OrderMessageInput interface {
-	OrderMessage(phone string, orderLink string)
+	OrderMessage(phone string, orderLink, description string)
 }
 
 /*

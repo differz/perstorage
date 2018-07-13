@@ -51,6 +51,6 @@ func (r CustomerMessengerResponse) OnResponse(request messengers.ListenChatReque
 		go r.registerMessenger(request.Phone, request.Messenger, request.ChatID)
 	}
 	if request.FileURL != "" {
-		go r.downloadFile(request.FileURL, request.FileName, request.FileSize, request.Messenger, request.ChatID)
+		go r.downloadFile(request.FileURL, request.FileName, request.FileSize, request.Messenger, request.ChatID, request.Description)
 	}
 }

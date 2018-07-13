@@ -61,9 +61,9 @@ func (s service) uploadOrder(r *http.Request) (string, error) {
 	req.MD5 = common.ComputeMD5(temp)
 	temp.Close()
 
-	resp := PlaceOrderResponse{phone: req.Phone, ms: s.ms}
+	resp := PlaceOrderResponse{ms: s.ms}
 	s.placeOrder.PlaceOrder(req, resp)
-	return resp.downloadLink, nil
+	return "link", nil
 }
 
 func copyFile(in multipart.File, out *os.File, dataSize int) {

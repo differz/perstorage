@@ -56,5 +56,5 @@ func (u PlaceOrderUseCase) PlaceOrder(request contracts.PlaceOrderRequest, outpu
 		return
 	}
 
-	output.OnResponse(customer.Phone, order.Link())
+	output.OnResponse(customer.Phone, order.Link(), order.Description)
 }
