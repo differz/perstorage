@@ -212,3 +212,13 @@ func (s Storage) findOrderIDByLink(link string) (int, bool) {
 	}
 	return order.ID, true
 }
+
+// GetOrders takes oreders from db
+func (s Storage) GetOrders(strategy func()) ([]core.Order, error) {
+	return nil, nil
+}
+
+// GetOrderedItems takes all ordered items by selected order
+func (s Storage) GetOrderedItems(order core.Order) ([]core.Item, error) {
+	return nil, nil
+}

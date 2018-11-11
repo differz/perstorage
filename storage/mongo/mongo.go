@@ -62,6 +62,16 @@ func (s Storage) FindOrderByLink(link string) (core.Order, bool) {
 	return core.Order{}, false
 }
 
+// GetOrders takes oreders from db
+func (s Storage) GetOrders(strategy func()) ([]core.Order, error) {
+	return nil, nil
+}
+
+// GetOrderedItems takes all ordered items by selected order
+func (s Storage) GetOrderedItems(order core.Order) ([]core.Item, error) {
+	return nil, nil
+}
+
 // StoreCustomer save client to storage
 func (s Storage) StoreCustomer(item core.Customer) (int, error) {
 	return 0, nil

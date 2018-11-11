@@ -7,4 +7,6 @@ type Order interface {
 	StoreOrder(order core.Order) (int, error)
 	FindOrderByID(id int) (core.Order, bool)
 	FindOrderByLink(link string) (core.Order, bool)
+	GetOrders(strategy func()) ([]core.Order, error)
+	GetOrderedItems(order core.Order) ([]core.Item, error)
 }
