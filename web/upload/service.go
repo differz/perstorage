@@ -6,6 +6,7 @@ import (
 	"mime/multipart"
 	"net/http"
 	"os"
+	"strconv"
 
 	"../../common"
 	"../../configuration/context"
@@ -44,6 +45,7 @@ func (s service) uploadOrder(r *http.Request) (string, error) {
 	req.Phone = r.FormValue("phone")
 	req.Description = r.FormValue("description")
 	req.Private = r.FormValue("private") == "private"
+	req.CategoryID, _ = strconv.Atoi(r.FormValue("category"))
 
 	err = os.MkdirAll(req.Dir, os.ModePerm)
 	if err != nil {

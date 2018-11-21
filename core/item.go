@@ -8,6 +8,7 @@ type Item struct {
 	Available  bool
 	Filename   string
 	SourceName string
+	Category   Category
 }
 
 // IsNew returns true if it is new item

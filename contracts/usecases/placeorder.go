@@ -8,6 +8,7 @@ type PlaceOrderRequest struct {
 	Private     bool
 	MD5         []byte
 	CustomerID  int
+	CategoryID  int
 	Description string
 }
 

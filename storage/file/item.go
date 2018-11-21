@@ -41,14 +41,14 @@ func (s Storage) StoreItem(item core.Item) (int, error) {
 	mutex.Lock()
 	defer mutex.Unlock()
 
-	sql := "INSERT INTO items(name, filename, path, size, available) VALUES(?, ?, ?, ?, ?)"
+	sql := "INSERT INTO items(name, filename, path, size, category, available) VALUES(?, ?, ?, ?, ?, ?)"
 	stmt, err := s.connection.Prepare(sql)
 	if err != nil {
 		log.Fatal("prepared statement for table items ", err)
 	}
 	defer stmt.Close()
 
-	res, err := stmt.Exec("", item.Filename, path, size, true)
+	res, err := stmt.Exec("", item.Filename, path, size, item.Category, true)
 	if err != nil {
 		log.Printf("can't insert item into db %e", err)
 		return 0, err
