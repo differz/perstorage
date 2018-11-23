@@ -4,5 +4,6 @@
   "StorageName"   : "file",
   "StorageArgs"   : "./local/storage/",
   "MessengerName" : "telegram",
-  "MessengerKey"  : "529441026:AAFSIDbMBsdSaVNcQFIh4upIqL_KbU_oUGY22"
+  "MessengerKey"  : "529441026:AAFSIDbMBsdSaVNcQFIh4upIqL_KbU_oUGY22",
+  "PurgeDate"     : "2018-07-10"
 }
