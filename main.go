@@ -16,6 +16,7 @@ import (
 	_ "./messenger/telegram"
 	_ "./storage/file"
 	_ "./storage/mongo"
+	_ "./web/api"
 	_ "./web/download"
 	_ "./web/root"
 	_ "./web/upload"
