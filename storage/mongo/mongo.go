@@ -47,6 +47,11 @@ func (s Storage) FindItemByID(id int) (core.Item, bool) {
 	return core.Item{}, false
 }
 
+// DeleteItem remove file from storage
+func (s Storage) DeleteItem(item core.Item) bool {
+	return false
+}
+
 // StoreOrder save bucket to storage
 func (s Storage) StoreOrder(item core.Order) (int, error) {
 	return 0, nil
@@ -63,13 +68,18 @@ func (s Storage) FindOrderByLink(link string) (core.Order, bool) {
 }
 
 // GetOrders takes oreders from db
-func (s Storage) GetOrders(strategy func()) ([]core.Order, error) {
+func (s Storage) GetOrders(strategy func() string) ([]core.Order, error) {
 	return nil, nil
 }
 
 // GetOrderedItems takes all ordered items by selected order
-func (s Storage) GetOrderedItems(order core.Order) ([]core.Item, error) {
-	return nil, nil
+func (s Storage) GetOrderedItems(order core.Order) ([]core.Item, bool) {
+	return nil, false
+}
+
+// DeleteOrder remove order from storage
+func (s Storage) DeleteOrder(order core.Order) bool {
+	return false
 }
 
 // StoreCustomer save client to storage

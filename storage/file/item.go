@@ -68,3 +68,57 @@ func (s Storage) StoreItem(item core.Item) (int, error) {
 func (s Storage) FindItemByID(id int) (core.Item, bool) {
 	return core.Item{}, false
 }
+
+// DeleteItem remove file from storage
+func (s Storage) DeleteItem(item core.Item) bool {
+	mutex.Lock()
+	defer mutex.Unlock()
+	if s.deleteItemFile(item) {
+		return s.deleteItemLink(item)
+	}
+	return false
+}
+
+func (s Storage) deleteItemFile(item core.Item) bool {
+	sql := "SELECT path FROM items WHERE id = ?"
+	stmt, err := s.connection.Prepare(sql)
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer stmt.Close()
+
+	rows, err := stmt.Query(item.ID)
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer rows.Close()
+
+	if rows.Next() {
+		var path string
+		err = rows.Scan(&path)
+		if err != nil {
+			log.Fatal(err)
+		}
+		err = os.Remove(path)
+		if err != nil {
+			log.Print(err)
+			return false
+		}
+	}
+	return true
+}
+
+func (s Storage) deleteItemLink(item core.Item) bool {
+	sql := "DELETE FROM items WHERE id = ?"
+	stmt, err := s.connection.Prepare(sql)
+	if err != nil {
+		log.Fatal("prepared statement for table items ", err)
+	}
+	defer stmt.Close()
+
+	_, err = stmt.Exec(item.ID)
+	if err != nil {
+		log.Fatal("can't delete item from db ", err)
+	}
+	return true
+}
