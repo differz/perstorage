@@ -17,6 +17,7 @@ type Config struct {
 	StorageArgs   string
 	MessengerName string
 	MessengerKey  string
+	PurgeDate     string
 }
 
 const (
@@ -68,6 +69,11 @@ func ServerPort() string {
 		port = addr[idx:]
 	}
 	return port
+}
+
+// PurgeDate max period of history
+func PurgeDate() string {
+	return Get().PurgeDate
 }
 
 // ExecutableDir current dir for perstorage binary

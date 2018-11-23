@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"log"
 
+	"../configuration"
 	"../storage"
 )
 
@@ -41,5 +42,5 @@ func (u PurgeOrdersOlderUseCase) PurgeOrders() {
 }
 
 func strategyOldOrders() string {
-	return "order_date < '2018-07-10'"
+	return "order_date < '" + configuration.PurgeDate() + "'"
 }
