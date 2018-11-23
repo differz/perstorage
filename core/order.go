@@ -3,6 +3,8 @@ package core
 import (
 	"crypto/sha256"
 	"encoding/hex"
+	"fmt"
+	"time"
 )
 
 // Order contains several files which places at ones
@@ -11,6 +13,9 @@ type Order struct {
 	Customer    Customer
 	Items       []Item
 	Description string
+	Size        int
+	Category    Category
+	Date        time.Time
 }
 
 // IsNew returns true if it is new order
@@ -32,4 +37,8 @@ func (o *Order) Link() string {
 	hasher.Write([]byte(key))
 	hash := hasher.Sum(nil)
 	return hex.EncodeToString(hash)
+}
+
+func (o *Order) String() string {
+	return fmt.Sprintf("Order No:%d %s %s", o.ID, o.Description, o.Date)
 }
