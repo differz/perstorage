@@ -189,7 +189,7 @@ func (s Storage) findOrderIDByLink(link string) (int, bool) {
 	return order.ID, true
 }
 
-// GetOrders takes oreders from db
+// GetOrders takes orders from db
 func (s Storage) GetOrders(strategy func() string) ([]core.Order, error) {
 	sql := "SELECT" +
 		"   o.id, o.description, o.size, o.category, o.order_date," +

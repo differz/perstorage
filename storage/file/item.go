@@ -73,10 +73,13 @@ func (s Storage) FindItemByID(id int) (core.Item, bool) {
 func (s Storage) DeleteItem(item core.Item) bool {
 	mutex.Lock()
 	defer mutex.Unlock()
-	if s.deleteItemFile(item) {
-		return s.deleteItemLink(item)
+	if !s.deleteItemFile(item) {
+		return false
 	}
-	return false
+	if !s.deleteItemLink(item) {
+		return false
+	}
+	return true
 }
 
 func (s Storage) deleteItemFile(item core.Item) bool {
