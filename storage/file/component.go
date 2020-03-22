@@ -7,9 +7,9 @@ import (
 	"path/filepath"
 	"sync"
 
-	"perstorage/common"
-	"perstorage/configuration"
-	"perstorage/storage"
+	"github.com/differz/perstorage/common"
+	"github.com/differz/perstorage/configuration"
+	"github.com/differz/perstorage/storage"
 
 	"github.com/mattes/migrate"
 	"github.com/mattes/migrate/database/sqlite3"

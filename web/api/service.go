@@ -1,9 +1,9 @@
 package api
 
 import (
-	"perstorage/configuration/context"
-	"perstorage/contracts/usecases"
-	"perstorage/usecases"
+	"github.com/differz/perstorage/configuration/context"
+	"github.com/differz/perstorage/contracts/usecases"
+	"github.com/differz/perstorage/usecases"
 )
 
 type service struct {

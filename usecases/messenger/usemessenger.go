@@ -1,12 +1,12 @@
 package usecases
 
 import (
-	"perstorage/common"
-	"perstorage/contracts/messengers"
-	"perstorage/contracts/usecases"
-	"perstorage/messenger"
-	"perstorage/storage"
-	uc "perstorage/usecases"
+	"github.com/differz/perstorage/common"
+	"github.com/differz/perstorage/contracts/messengers"
+	"github.com/differz/perstorage/contracts/usecases"
+	"github.com/differz/perstorage/messenger"
+	"github.com/differz/perstorage/storage"
+	uc "github.com/differz/perstorage/usecases"
 )
 
 // CustomerMessengerUseCase object

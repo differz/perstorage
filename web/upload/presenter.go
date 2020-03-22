@@ -1,6 +1,6 @@
 package upload
 
-import "perstorage/messenger/messengers"
+import "github.com/differz/perstorage/messenger/messengers"
 
 // PlaceOrderResponse response data
 type PlaceOrderResponse struct {

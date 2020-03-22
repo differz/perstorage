@@ -3,7 +3,7 @@ package file
 import (
 	"log"
 
-	"perstorage/core"
+	"github.com/differz/perstorage/core"
 )
 
 // StoreCustomerMessenger save chat id to storage by customer

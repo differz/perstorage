@@ -5,7 +5,7 @@ import (
 	"log"
 	"net/http"
 
-	"perstorage/web"
+	"github.com/differz/perstorage/web"
 )
 
 type controller struct {

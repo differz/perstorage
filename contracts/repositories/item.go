@@ -1,6 +1,6 @@
 package repositories
 
-import "perstorage/core"
+import "github.com/differz/perstorage/core"
 
 // Item repository
 type Item interface {

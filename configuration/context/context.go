@@ -4,10 +4,10 @@ import (
 	"fmt"
 	"sync"
 
-	"perstorage/common"
-	"perstorage/configuration"
-	"perstorage/messenger"
-	"perstorage/storage"
+	"github.com/differz/perstorage/common"
+	"github.com/differz/perstorage/configuration"
+	"github.com/differz/perstorage/messenger"
+	"github.com/differz/perstorage/storage"
 )
 
 type context struct {

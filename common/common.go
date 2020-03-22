@@ -5,7 +5,7 @@ import (
 	"strings"
 	"time"
 
-	"perstorage/configuration"
+	"github.com/differz/perstorage/configuration"
 )
 
 const (

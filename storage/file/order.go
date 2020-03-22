@@ -5,7 +5,7 @@ import (
 	"strings"
 	"time"
 
-	"perstorage/core"
+	"github.com/differz/perstorage/core"
 )
 
 // StoreOrder save bucket to storage

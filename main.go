@@ -4,23 +4,23 @@ import (
 	"log"
 	"net/http"
 
-	"perstorage/common"
-	"perstorage/configuration"
-	"perstorage/configuration/context"
-	"perstorage/messenger"
-	"perstorage/messenger/messengers"
+	"github.com/differz/perstorage/common"
+	"github.com/differz/perstorage/configuration"
+	"github.com/differz/perstorage/configuration/context"
+	"github.com/differz/perstorage/messenger"
+	"github.com/differz/perstorage/messenger/messengers"
 
-	"perstorage/storage"
-	"perstorage/web"
+	"github.com/differz/perstorage/storage"
+	"github.com/differz/perstorage/web"
 
 	// used modules
-	_ "perstorage/messenger/telegram"
-	_ "perstorage/storage/file"
-	_ "perstorage/storage/mongo"
-	_ "perstorage/web/api"
-	_ "perstorage/web/download"
-	_ "perstorage/web/root"
-	_ "perstorage/web/upload"
+	_ "github.com/differz/perstorage/messenger/telegram"
+	_ "github.com/differz/perstorage/storage/file"
+	_ "github.com/differz/perstorage/storage/mongo"
+	_ "github.com/differz/perstorage/web/api"
+	_ "github.com/differz/perstorage/web/download"
+	_ "github.com/differz/perstorage/web/root"
+	_ "github.com/differz/perstorage/web/upload"
 )
 
 func main() {

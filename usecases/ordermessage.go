@@ -3,9 +3,9 @@ package usecases
 import (
 	"log"
 
-	"perstorage/core"
-	"perstorage/messenger"
-	"perstorage/storage"
+	"github.com/differz/perstorage/core"
+	"github.com/differz/perstorage/messenger"
+	"github.com/differz/perstorage/storage"
 )
 
 // OrderMessageUseCase object

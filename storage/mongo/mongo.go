@@ -3,9 +3,9 @@ package mongo
 // The MongoDB driver for Go
 // https://github.com/globalsign/mgo
 import (
-	"perstorage/common"
-	"perstorage/core"
-	"perstorage/storage"
+	"github.com/differz/perstorage/common"
+	"github.com/differz/perstorage/core"
+	"github.com/differz/perstorage/storage"
 )
 
 // Storage object for mongo db

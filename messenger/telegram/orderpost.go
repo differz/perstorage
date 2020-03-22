@@ -3,7 +3,7 @@ package telegram
 import (
 	"fmt"
 
-	"perstorage/common"
+	"github.com/differz/perstorage/common"
 
 	"gopkg.in/telegram-bot-api.v4"
 )

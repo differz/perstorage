@@ -7,8 +7,8 @@ import (
 	"os"
 	"strings"
 
-	"perstorage/configuration"
-	"perstorage/web"
+	"github.com/differz/perstorage/configuration"
+	"github.com/differz/perstorage/web"
 )
 
 type controller struct {

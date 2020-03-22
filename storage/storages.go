@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"log"
 
-	"perstorage/common"
-	"perstorage/contracts/repositories"
+	"github.com/differz/perstorage/common"
+	"github.com/differz/perstorage/contracts/repositories"
 )
 
 // Storager consist of all repository contracts that each should implement

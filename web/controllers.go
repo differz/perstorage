@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"log"
 
-	"perstorage/common"
+	"github.com/differz/perstorage/common"
 )
 
 // Controller for web resources

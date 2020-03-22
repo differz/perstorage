@@ -1,7 +1,7 @@
 package messengers
 
 import (
-	"perstorage/storage"
+	"github.com/differz/perstorage/storage"
 )
 
 // ListenChatRequest parameters

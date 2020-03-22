@@ -3,7 +3,7 @@ package file
 import (
 	"log"
 
-	"perstorage/core"
+	"github.com/differz/perstorage/core"
 )
 
 // StoreCustomer save client to storage

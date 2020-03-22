@@ -1,10 +1,10 @@
 package messengers
 
 import (
-	"perstorage/configuration/context"
-	"perstorage/contracts/usecases"
-	uc "perstorage/usecases"
-	ucm "perstorage/usecases/messenger"
+	"github.com/differz/perstorage/configuration/context"
+	"github.com/differz/perstorage/contracts/usecases"
+	uc "github.com/differz/perstorage/usecases"
+	ucm "github.com/differz/perstorage/usecases/messenger"
 )
 
 // Service object

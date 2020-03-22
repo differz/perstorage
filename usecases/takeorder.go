@@ -1,8 +1,8 @@
 package usecases
 
 import (
-	"perstorage/contracts/usecases"
-	"perstorage/storage"
+	"github.com/differz/perstorage/contracts/usecases"
+	"github.com/differz/perstorage/storage"
 )
 
 // TakeOrderUseCase object
