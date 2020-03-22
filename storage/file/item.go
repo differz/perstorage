@@ -4,7 +4,8 @@ import (
 	"log"
 	"os"
 
-	"../../core"
+	"perstorage/core"
+
 	"github.com/satori/go.uuid"
 )
 

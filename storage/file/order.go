@@ -5,7 +5,7 @@ import (
 	"strings"
 	"time"
 
-	"../../core"
+	"perstorage/core"
 )
 
 // StoreOrder save bucket to storage

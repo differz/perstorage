@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"log"
 
-	"../common"
-	"../contracts/repositories"
+	"perstorage/common"
+	"perstorage/contracts/repositories"
 )
 
 // Storager consist of all repository contracts that each should implement

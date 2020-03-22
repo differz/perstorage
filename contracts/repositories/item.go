@@ -1,6 +1,6 @@
 package repositories
 
-import "../../core"
+import "perstorage/core"
 
 // Item repository
 type Item interface {

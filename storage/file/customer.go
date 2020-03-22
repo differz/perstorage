@@ -3,7 +3,7 @@ package file
 import (
 	"log"
 
-	"../../core"
+	"perstorage/core"
 )
 
 // StoreCustomer save client to storage

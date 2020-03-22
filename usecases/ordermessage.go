@@ -3,9 +3,9 @@ package usecases
 import (
 	"log"
 
-	"../core"
-	"../messenger"
-	"../storage"
+	"perstorage/core"
+	"perstorage/messenger"
+	"perstorage/storage"
 )
 
 // OrderMessageUseCase object

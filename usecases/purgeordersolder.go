@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"log"
 
-	"../configuration"
-	"../storage"
+	"perstorage/configuration"
+	"perstorage/storage"
 )
 
 // PurgeOrdersOlderUseCase object

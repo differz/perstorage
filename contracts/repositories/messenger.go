@@ -1,6 +1,6 @@
 package repositories
 
-import "../../core"
+import "perstorage/core"
 
 // Messenger repository
 type Messenger interface {

@@ -3,7 +3,8 @@ package telegram
 import (
 	"fmt"
 
-	"../../common"
+	"perstorage/common"
+
 	"gopkg.in/telegram-bot-api.v4"
 )
 

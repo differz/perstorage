@@ -3,7 +3,7 @@ package usecases
 import (
 	"log"
 
-	"../../core"
+	"perstorage/core"
 )
 
 func (r CustomerMessengerResponse) registerMessenger(phone, messenger string, chatID int) {

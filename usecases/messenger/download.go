@@ -8,8 +8,8 @@ import (
 	"net/http"
 	"os"
 
-	"../../common"
-	"../../contracts/usecases"
+	"perstorage/common"
+	"perstorage/contracts/usecases"
 )
 
 // Download file from chat

@@ -7,9 +7,10 @@ import (
 	"path/filepath"
 	"sync"
 
-	"../../common"
-	"../../configuration"
-	"../../storage"
+	"perstorage/common"
+	"perstorage/configuration"
+	"perstorage/storage"
+
 	"github.com/mattes/migrate"
 	"github.com/mattes/migrate/database/sqlite3"
 	// sqlite

@@ -3,9 +3,9 @@ package usecases
 import (
 	"log"
 
-	"../contracts/usecases"
-	"../core"
-	"../storage"
+	"perstorage/contracts/usecases"
+	"perstorage/core"
+	"perstorage/storage"
 )
 
 // PlaceOrderUseCase object

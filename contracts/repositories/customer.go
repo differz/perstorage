@@ -1,6 +1,6 @@
 package repositories
 
-import "../../core"
+import "perstorage/core"
 
 // Customer repository
 type Customer interface {

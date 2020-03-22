@@ -4,7 +4,8 @@ import (
 	"log"
 	"time"
 
-	"../../contracts/messengers"
+	"perstorage/contracts/messengers"
+
 	"gopkg.in/telegram-bot-api.v4"
 )
 

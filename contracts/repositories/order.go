@@ -1,6 +1,6 @@
 package repositories
 
-import "../../core"
+import "perstorage/core"
 
 // Order repository
 type Order interface {

@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"log"
 
-	"../common"
-	"../contracts/messengers"
+	"perstorage/common"
+	"perstorage/contracts/messengers"
 )
 
 // Messenger consist of all messengers contracts that each should implement

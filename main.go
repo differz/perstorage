@@ -4,22 +4,23 @@ import (
 	"log"
 	"net/http"
 
-	"./common"
-	"./configuration"
-	"./configuration/context"
-	"./messenger"
-	"./messenger/service"
-	"./storage"
-	"./web"
+	"perstorage/common"
+	"perstorage/configuration"
+	"perstorage/configuration/context"
+	"perstorage/messenger"
+	"perstorage/messenger/messengers"
+
+	"perstorage/storage"
+	"perstorage/web"
 
 	// used modules
-	_ "./messenger/telegram"
-	_ "./storage/file"
-	_ "./storage/mongo"
-	_ "./web/api"
-	_ "./web/download"
-	_ "./web/root"
-	_ "./web/upload"
+	_ "perstorage/messenger/telegram"
+	_ "perstorage/storage/file"
+	_ "perstorage/storage/mongo"
+	_ "perstorage/web/api"
+	_ "perstorage/web/download"
+	_ "perstorage/web/root"
+	_ "perstorage/web/upload"
 )
 
 func main() {

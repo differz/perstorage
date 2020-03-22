@@ -1,12 +1,12 @@
 package usecases
 
 import (
-	"../../common"
-	"../../contracts/messengers"
-	"../../contracts/usecases"
-	"../../messenger"
-	"../../storage"
-	uc "../../usecases"
+	"perstorage/common"
+	"perstorage/contracts/messengers"
+	"perstorage/contracts/usecases"
+	"perstorage/messenger"
+	"perstorage/storage"
+	uc "perstorage/usecases"
 )
 
 // CustomerMessengerUseCase object

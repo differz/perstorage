@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"log"
 
-	"../common"
+	"perstorage/common"
 )
 
 // Controller for web resources

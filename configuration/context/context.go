@@ -4,10 +4,10 @@ import (
 	"fmt"
 	"sync"
 
-	"../../common"
-	"../../configuration"
-	"../../messenger"
-	"../../storage"
+	"perstorage/common"
+	"perstorage/configuration"
+	"perstorage/messenger"
+	"perstorage/storage"
 )
 
 type context struct {

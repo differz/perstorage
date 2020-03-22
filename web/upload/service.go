@@ -8,11 +8,12 @@ import (
 	"os"
 	"strconv"
 
-	"../../common"
-	"../../configuration/context"
-	"../../contracts/usecases"
-	"../../messenger/service"
-	"../../usecases"
+	"perstorage/common"
+	"perstorage/configuration/context"
+	"perstorage/contracts/usecases"
+	"perstorage/messenger/messengers"
+	"perstorage/usecases"
+
 	"gopkg.in/cheggaaa/pb.v1"
 )
 

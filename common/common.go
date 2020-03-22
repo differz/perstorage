@@ -5,7 +5,7 @@ import (
 	"strings"
 	"time"
 
-	"../configuration"
+	"perstorage/configuration"
 )
 
 const (

@@ -1,6 +1,6 @@
 package upload
 
-import "../../messenger/service"
+import "perstorage/messenger/messengers"
 
 // PlaceOrderResponse response data
 type PlaceOrderResponse struct {

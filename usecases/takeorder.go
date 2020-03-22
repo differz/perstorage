@@ -1,8 +1,8 @@
 package usecases
 
 import (
-	"../contracts/usecases"
-	"../storage"
+	"perstorage/contracts/usecases"
+	"perstorage/storage"
 )
 
 // TakeOrderUseCase object
