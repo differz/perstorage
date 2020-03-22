@@ -15,7 +15,7 @@ env:
 # You don't need to test on very old versions of the Go compiler. It's the user's
 # responsibility to keep their compiler up to date.
 go:
-  - 1.10.x
+  - 1.10.1
   #- 1.11.x
   #- 1.12.x
   #- 1.13.x
@@ -31,6 +31,7 @@ before_install:
 # in vendor/
 #install: true
 install:
+  - go get perstorage
   - go get github.com/mattn/go-sqlite3
   - go get github.com/mattes/migrate
   - go get github.com/satori/go.uuid
