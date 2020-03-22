@@ -4,7 +4,7 @@
 FROM golang:alpine AS builder
 # Install git
 # Git is required for fetching the dependencies
-RUN apk update && apk add --no-cache git
+RUN apk update && apk add --no-cache git gcc
 WORKDIR $GOPATH/src/github.com/differz/perstorage/
 COPY . .
 # Fetch dependencies
