@@ -54,6 +54,6 @@ notifications:
 ##  - golangci-lint run       # run a bunch of code checkers/linters in parallel
 ##  - go test -v -race ./...  # Run all the tests with the race detector enabled
 
-script:
-  - ./pre-commit
-  - go test -cpu=1,2 -v -tags integration ./...
+#script:
+#  - ./pre-commit
+#  - go test -cpu=1,2 -v -tags integration ./...
