@@ -118,3 +118,5 @@ debug
 local
 TEMP.*
 .vscode
+*.pem
+perstorage
