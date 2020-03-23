@@ -15,10 +15,10 @@ type Config struct {
 	ServerAddress string
 	StorageName   string
 	StorageArgs   string
+	TempDirectory string
 	MessengerName string
 	MessengerKey  string
 	PurgeDate     string
-	TempDirectory string
 }
 
 const (

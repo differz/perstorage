@@ -1,8 +1,9 @@
 {
   "ConfigName"    : "main",
-  "ServerAddress" : "http://localhost:8080",
+  "ServerAddress" : "https://localhost:9443",
   "StorageName"   : "file",
-  "StorageArgs"   : "./storage/",
+  "StorageArgs"   : "./local/",
+  "TempDirectory" : "",
   "MessengerName" : "telegram",
   "MessengerKey"  : "529441026:AAFSIDbMBsdSaVNcQFIh4upIqL_KbU_oUGY22",
   "PurgeDate"     : "2020-03-01"
