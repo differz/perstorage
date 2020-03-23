@@ -1,5 +1,5 @@
 # use the latest ubuntu environment (18.04) available on travis
-dist: bionic
+# dist: bionic
 
 language: go
 
@@ -23,7 +23,6 @@ before_install:
 # in vendor/
 #install: true
 install:
-  #- go get github.com/differz/perstorage
   - go get github.com/mattn/go-sqlite3
   - go get github.com/mattes/migrate
   - go get github.com/satori/go.uuid
