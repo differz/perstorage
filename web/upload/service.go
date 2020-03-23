@@ -9,6 +9,7 @@ import (
 	"strconv"
 
 	"github.com/differz/perstorage/common"
+	"github.com/differz/perstorage/configuration"
 	"github.com/differz/perstorage/configuration/context"
 	"github.com/differz/perstorage/contracts/usecases"
 	"github.com/differz/perstorage/messenger/messengers"
@@ -40,9 +41,12 @@ func (s service) uploadOrder(r *http.Request) (string, error) {
 	}
 	defer file.Close()
 
+	// dir may be equal s.placeOrder.repo.dir for file database
+	dir := configuration.TempDirectory() + inMD5 + "/"
+
 	req := contracts.PlaceOrderRequest{}
 	req.Filename = handler.Filename
-	req.Dir = "./local/incoming/" + inMD5 + "/"
+	req.Dir = dir
 	req.Phone = r.FormValue("phone")
 	req.Description = r.FormValue("description")
 	req.Private = r.FormValue("private") == "private"
@@ -54,14 +58,14 @@ func (s service) uploadOrder(r *http.Request) (string, error) {
 		return "", err
 	}
 
-	temp, err := os.Create(req.GetSourceName())
+	temp, err := os.Create(req.GetFullFileName())
 	if err != nil {
 		log.Printf("can't create file %e", err)
 		return "", err
 	}
 
 	copyFile(file, temp, int(handler.Size))
-	req.MD5 = common.ComputeMD5(temp)
+	req.MD5 = common.ComputeFileMD5(temp)
 	temp.Close()
 
 	resp := PlaceOrderResponse{ms: s.ms}

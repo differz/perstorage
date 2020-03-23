@@ -22,7 +22,7 @@ type PlaceOrderOutput interface {
 	OnResponse(phone, orderLink, description string)
 }
 
-// GetSourceName TODO rename filepath?
-func (r PlaceOrderRequest) GetSourceName() string {
+// GetFullFileName Dir/Filename
+func (r PlaceOrderRequest) GetFullFileName() string {
 	return r.Dir + r.Filename
 }

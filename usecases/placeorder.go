@@ -40,7 +40,7 @@ func (u PlaceOrderUseCase) PlaceOrder(request contracts.PlaceOrderRequest, outpu
 		u.repo.StoreCustomer(customer)
 	}
 
-	item := core.Item{Filename: request.Filename, SourceName: request.GetSourceName(), Category: core.Category(request.CategoryID)}
+	item := core.Item{Filename: request.Filename, SourceName: request.GetFullFileName(), Category: core.Category(request.CategoryID)}
 	item.ID, err = u.repo.StoreItem(item)
 	if err != nil {
 		log.Printf("can't store item %s %e", item.Filename, err)

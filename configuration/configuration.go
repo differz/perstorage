@@ -18,10 +18,11 @@ type Config struct {
 	MessengerName string
 	MessengerKey  string
 	PurgeDate     string
+	TempDirectory string
 }
 
 const (
-	version   = "1.0.3.1"
+	version   = "1.0.4.1"
 	component = "configuration"
 	cfgFile   = "perstorage.json"
 )
@@ -74,6 +75,15 @@ func ServerPort() string {
 // PurgeDate max period of history
 func PurgeDate() string {
 	return Get().PurgeDate
+}
+
+// TempDirectory for consistency uploads
+func TempDirectory() string {
+	temp := Get().TempDirectory
+	if temp == "" {
+		temp = "./local/incoming/"
+	}
+	return temp
 }
 
 // ExecutableDir current dir for perstorage binary

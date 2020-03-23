@@ -1,14 +1,13 @@
 package usecases
 
 import (
-	"crypto/md5"
-	"encoding/hex"
 	"io"
 	"log"
 	"net/http"
 	"os"
 
 	"github.com/differz/perstorage/common"
+	"github.com/differz/perstorage/configuration"
 	"github.com/differz/perstorage/contracts/usecases"
 )
 
@@ -20,15 +19,12 @@ func (r CustomerMessengerResponse) downloadFile(url, filename string, size int, 
 		return
 	}
 
-	// TODO ref
-	hasher := md5.New()
-	hasher.Write([]byte(url))
-	hash := hasher.Sum(nil)
-	inMD5 := hex.EncodeToString(hash)
+	inMD5 := common.ConvertToMD5(url)
+	dir := configuration.TempDirectory() + inMD5 + "/"
 
 	req := contracts.PlaceOrderRequest{}
 	req.Filename = filename
-	req.Dir = "./local/incoming/" + inMD5 + "/"
+	req.Dir = dir
 	req.CustomerID = customerID
 	req.Description = description
 	req.Private = true
@@ -39,7 +35,7 @@ func (r CustomerMessengerResponse) downloadFile(url, filename string, size int, 
 		return
 	}
 
-	temp, err := os.Create(req.GetSourceName())
+	temp, err := os.Create(req.GetFullFileName())
 	if err != nil {
 		log.Printf("can't create file %e", err)
 		return
@@ -58,7 +54,7 @@ func (r CustomerMessengerResponse) downloadFile(url, filename string, size int, 
 		return
 	}
 
-	req.MD5 = common.ComputeMD5(temp)
+	req.MD5 = common.ComputeFileMD5(temp)
 	temp.Close()
 
 	resp := PlaceOrderResponse{phone: req.Phone, orderMessage: r.orderMessage, description: description}
