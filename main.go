@@ -35,8 +35,8 @@ func main() {
 	srv.ListenChat()
 
 	common.ContextUpMessage("application", "running...")
-	err := http.ListenAndServe(configuration.ServerPort(), nil)
+	err := http.ListenAndServeTLS(configuration.ServerPort(), "cert.pem", "privkey.pem", nil)
 	if err != nil {
-		log.Printf("can't start http server %e", err)
+		log.Printf("can't start https server %e", err)
 	}
 }
