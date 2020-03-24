@@ -1,6 +1,6 @@
 {
   "ConfigName"    : "main",
-  "ServerAddress" : "https://localhost:8443",
+  "ServerAddress" : "https://localhost:443",
   "StorageName"   : "file",
   "StorageArgs"   : "./local/",
   "TempDirectory" : "",
