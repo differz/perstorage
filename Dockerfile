@@ -46,7 +46,7 @@ COPY --from=builder $GOPATH/bin/perstorage /perstorage
 WORKDIR /
 
 # Export necessary port
-EXPOSE 9443
+EXPOSE 8443
 
 # Run the perstorage binary only via !/bin/sh
 ENTRYPOINT ["./perstorage"]
