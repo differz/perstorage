@@ -37,7 +37,6 @@ func (u PurgeOrdersOlderUseCase) PurgeOrders() {
 			u.repo.DeleteItem(item)
 		}
 		u.repo.DeleteOrder(order)
-		break
 	}
 }
 
